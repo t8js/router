@@ -1,7 +1,7 @@
 {
   "name": "@t8/router",
   "version": "0.1.1",
-  "description": "Browser history router",
+  "description": "Vanilla JS/TS browser history router",
   "keywords": [
     "history",
     "routing",
