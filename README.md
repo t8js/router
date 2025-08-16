@@ -6,7 +6,7 @@
 
 Installation: `npm i @t8/router`
 
-## Setup
+## Initialization
 
 ```js
 import {Route} from '@t8/router';
