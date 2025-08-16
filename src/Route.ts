@@ -8,7 +8,6 @@ import type {NavigationEvent} from './types/NavigationEvent';
 import type {NavigationMode} from './types/NavigationMode';
 import {getMatchState} from './utils/getMatchState';
 import {isSameOrigin} from './utils/isSameOrigin';
-import {match} from './utils/match';
 
 export class Route {
     _href = '';
@@ -185,7 +184,7 @@ export class Route {
      * Matches the current location against the location pattern.
      */
     match<P extends LocationPattern>(locationPattern: P) {
-        return match<P>(locationPattern, this._href);
+        return getMatchState<P>(locationPattern, this._href);
     }
 
     /**
