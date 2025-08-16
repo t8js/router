@@ -68,7 +68,7 @@ export class Route {
          *
          * @defaultValue 'a, area'
          */
-        elements: Parameters<typeof observe>[2],
+        elements?: Parameters<typeof observe>[2],
     ) {
         return observe(this, container, elements);
     }
