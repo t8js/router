@@ -3,10 +3,11 @@ import {getNavigationMode} from './utils/getNavigationMode';
 import {isArrayLike} from './utils/isArrayLike';
 import {isLinkElement} from './utils/isLinkElement';
 import {isRouteEvent} from './utils/isRouteEvent';
+import type {ContainerElement} from './types/ContainerElement';
 
 export function observe(
     route: Route,
-    container: Element | Document | null | undefined,
+    container: ContainerElement | (() => ContainerElement),
     /**
      * A selector, or an HTML element, or a collection thereof.
      *
@@ -20,7 +21,11 @@ export function observe(
         | NodeList = 'a, area',
 ) {
     let handleClick = (event: MouseEvent) => {
-        if (!route.connected || !container) return;
+        let resolvedContainer = typeof container === 'function'
+            ? container()
+            : container;
+
+        if (!route.connected || !resolvedContainer) return;
 
         if (event.defaultPrevented) return;
 
@@ -41,7 +46,7 @@ export function observe(
 
             if (
                 isLinkElement(element) &&
-                container.contains(element) &&
+                resolvedContainer.contains(element) &&
                 isRouteEvent(event, element)
             ) {
                 activeElement = element;

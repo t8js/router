@@ -1,5 +1,6 @@
 export * from './src/Route';
 export * from './src/types/Config';
+export * from './src/types/ContainerElement';
 export * from './src/types/LinkNavigationProps';
 export * from './src/types/LocationObject';
 export * from './src/types/LocationPattern';
