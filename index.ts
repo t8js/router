@@ -12,6 +12,7 @@ export * from './src/types/MatchState';
 export * from './src/types/NavigationCallback';
 export * from './src/types/NavigationEvent';
 export * from './src/types/NavigationMode';
+export * from './src/types/URLData';
 export * from './src/utils/getMatchState';
 export * from './src/utils/getNavigationMode';
 export * from './src/utils/isLinkElement';
