@@ -1,9 +1,9 @@
 import type {Route} from './Route';
+import type {ContainerElement} from './types/ContainerElement';
 import {getNavigationMode} from './utils/getNavigationMode';
 import {isArrayLike} from './utils/isArrayLike';
 import {isLinkElement} from './utils/isLinkElement';
 import {isRouteEvent} from './utils/isRouteEvent';
-import type {ContainerElement} from './types/ContainerElement';
 
 export function observe(
     route: Route,
@@ -21,9 +21,8 @@ export function observe(
         | NodeList = 'a, area',
 ) {
     let handleClick = (event: MouseEvent) => {
-        let resolvedContainer = typeof container === 'function'
-            ? container()
-            : container;
+        let resolvedContainer =
+            typeof container === 'function' ? container() : container;
 
         if (!route.connected || !resolvedContainer) return;
 
