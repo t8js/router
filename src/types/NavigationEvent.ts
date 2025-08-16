@@ -1,4 +1,1 @@
-export type NavigationEvent =
-    | 'navigationstart'
-    | 'navigationcomplete';
- 
+export type NavigationEvent = 'navigationstart' | 'navigationcomplete';

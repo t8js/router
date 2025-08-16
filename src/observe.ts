@@ -1,8 +1,8 @@
+import type {Route} from './Route';
 import {getNavigationMode} from './utils/getNavigationMode';
 import {isArrayLike} from './utils/isArrayLike';
 import {isLinkElement} from './utils/isLinkElement';
 import {isRouteEvent} from './utils/isRouteEvent';
-import type {Route} from './Route';
 
 export function observe(
     route: Route,
@@ -25,15 +25,18 @@ export function observe(
         if (event.defaultPrevented) return;
 
         let activeElement: HTMLAnchorElement | HTMLAreaElement | null = null;
-        let connectedElements = isArrayLike(elements) ? Array.from(elements) : [elements];
+        let connectedElements = isArrayLike(elements)
+            ? Array.from(elements)
+            : [elements];
 
         for (let connectedElement of connectedElements) {
             let element: Node | null = null;
 
             if (typeof connectedElement === 'string')
-                element = event.target instanceof HTMLElement
-                    ? event.target.closest(connectedElement)
-                    : null;
+                element =
+                    event.target instanceof HTMLElement
+                        ? event.target.closest(connectedElement)
+                        : null;
             else element = connectedElement;
 
             if (

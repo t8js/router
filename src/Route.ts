@@ -1,4 +1,5 @@
 import {QuasiURL} from 'quasiurl';
+import {observe} from './observe';
 import type {LocationPattern} from './types/LocationPattern';
 import type {LocationValue} from './types/LocationValue';
 import type {MatchHandler} from './types/MatchHandler';
@@ -8,7 +9,6 @@ import type {NavigationMode} from './types/NavigationMode';
 import {getMatchState} from './utils/getMatchState';
 import {isSameOrigin} from './utils/isSameOrigin';
 import {match} from './utils/match';
-import {observe} from './observe';
 
 export class Route {
     _href = '';
@@ -17,7 +17,10 @@ export class Route {
         navigationstart: [],
         navigationcomplete: [],
     };
-    _navigationQueue: [LocationValue | undefined, NavigationMode | undefined][] = [];
+    _navigationQueue: [
+        LocationValue | undefined,
+        NavigationMode | undefined,
+    ][] = [];
     _navigated = false;
     connected = false;
     navigating = false;
@@ -76,8 +79,7 @@ export class Route {
 
         this._handlers[event].push(callback);
 
-        if (this.connected && this._navigated)
-            callback(this.href, this.href);
+        if (this.connected && this._navigated) callback(this.href, this.href);
 
         return () => {
             for (let i = this._handlers[event].length - 1; i >= 0; i--) {
@@ -117,7 +119,10 @@ export class Route {
         let prevHref = this._href;
         let nextHref = this._getHref(location);
 
-        for (let callback of [...this._handlers.navigationstart, this._transition]) {
+        for (let callback of [
+            ...this._handlers.navigationstart,
+            this._transition,
+        ]) {
             let result = callback(nextHref, prevHref, navigationMode);
 
             if ((result instanceof Promise ? await result : result) === false)
@@ -140,7 +145,11 @@ export class Route {
             await this._navigate.apply(this, pendingNavigation);
     }
 
-    _transition: NavigationCallback = (nextHref, _prevHref, navigationMode = 'assign') => {
+    _transition: NavigationCallback = (
+        nextHref,
+        _prevHref,
+        navigationMode = 'assign',
+    ) => {
         if (typeof window === 'undefined') return;
 
         if (
@@ -170,7 +179,7 @@ export class Route {
                 window.history.replaceState({}, '', nextHref);
                 break;
         }
-    }
+    };
 
     /**
      * Matches the current location against the location pattern.

@@ -1,3 +1,4 @@
+export * from './src/Route';
 export * from './src/types/Config';
 export * from './src/types/LinkNavigationProps';
 export * from './src/types/LocationObject';
@@ -16,4 +17,3 @@ export * from './src/utils/isLinkElement';
 export * from './src/utils/isLocationObject';
 export * from './src/utils/isRouteEvent';
 export * from './src/utils/isSameOrigin';
-export * from './src/Route';
