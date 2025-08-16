@@ -1,0 +1,30 @@
+{
+  "name": "@t8/router",
+  "version": "0.1.0",
+  "description": "Browser history router",
+  "keywords": [
+    "history",
+    "routing",
+    "spa"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/t8dev/router.git"
+  },
+  "license": "ISC",
+  "author": "axtk",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "npx npm-run-all clean compile",
+    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral",
+    "prepublishOnly": "npm run build",
+    "preversion": "npx npm-run-all shape build",
+    "shape": "npx codeshape"
+  },
+  "dependencies": {
+    "quasiurl": "^1.0.0",
+    "unpack-schema": "^1.2.2"
+  }
+}
