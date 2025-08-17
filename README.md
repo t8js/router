@@ -34,7 +34,7 @@ let route = new Route();
 ```js
 route.on('navigationstart', href => {
     if (hasUnsavedChanges)
-        return false;
+        return false; // prevents navigation
 
     if (href === '/') {
         route.assign('/intro');
@@ -81,3 +81,4 @@ The above line turns all `a` and `area` elements in the `document` to SPA route 
 ---
 
 - [Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts)
+- [React router](https://github.com/t8dev/react-router)
