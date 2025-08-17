@@ -20,7 +20,6 @@ export class Route {
     };
     _navigationQueue: [
         LocationValue | undefined,
-        URLData | undefined,
         NavigationMode | undefined,
     ][] = [];
     _navigated = false;
@@ -107,20 +106,19 @@ export class Route {
 
     async _navigate<T extends LocationValue>(
         location?: T,
-        state?: URLData<T>,
         navigationMode?: NavigationMode,
     ): Promise<void> {
         if (!this.connected) return;
 
         if (this.navigating) {
-            this._navigationQueue.push([location, state, navigationMode]);
+            this._navigationQueue.push([location, navigationMode]);
             return;
         }
 
         this.navigating = true;
 
         let prevHref = this._href;
-        let nextHref = this._getHref(compileHref(location, state));
+        let nextHref = this._getHref(location);
 
         for (let callback of [
             ...this._handlers.navigationstart,
@@ -191,6 +189,10 @@ export class Route {
         return getMatchState<P>(locationPattern, this._href);
     }
 
+    compile<T extends LocationValue>(location: T, state?: URLData<T>) {
+        return compileHref(location, state);
+    }
+
     /**
      * Loosely resembles the conditional ternary operator (`condition ? x : y`):
      * if the current location matches the location pattern the returned value
@@ -220,16 +222,16 @@ export class Route {
      * Adds an entry to the browser's session history
      * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState).
      */
-    assign<T extends LocationValue>(location: T, state?: URLData<T>) {
-        this._navigate(location, state, 'assign');
+    assign(location: LocationValue) {
+        this._navigate(location, 'assign');
     }
 
     /**
      * Replaces the current history entry
      * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).
      */
-    replace<T extends LocationValue>(location: T, state?: URLData<T>) {
-        this._navigate(location, state, 'replace');
+    replace(location: LocationValue) {
+        this._navigate(location, 'replace');
     }
 
     reload() {
