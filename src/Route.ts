@@ -6,6 +6,8 @@ import type {MatchHandler} from './types/MatchHandler';
 import type {NavigationCallback} from './types/NavigationCallback';
 import type {NavigationEvent} from './types/NavigationEvent';
 import type {NavigationMode} from './types/NavigationMode';
+import type {URLData} from './types/URLData';
+import {compileHref} from './utils/compileHref';
 import {getMatchState} from './utils/getMatchState';
 import {isSameOrigin} from './utils/isSameOrigin';
 
@@ -18,6 +20,7 @@ export class Route {
     };
     _navigationQueue: [
         LocationValue | undefined,
+        URLData | undefined,
         NavigationMode | undefined,
     ][] = [];
     _navigated = false;
@@ -102,21 +105,22 @@ export class Route {
         return `${origin}${pathname}${search}${hash}`;
     }
 
-    async _navigate(
-        location?: LocationValue,
+    async _navigate<T extends LocationValue>(
+        location?: T,
+        state?: URLData<T>,
         navigationMode?: NavigationMode,
     ): Promise<void> {
         if (!this.connected) return;
 
         if (this.navigating) {
-            this._navigationQueue.push([location, navigationMode]);
+            this._navigationQueue.push([location, state, navigationMode]);
             return;
         }
 
         this.navigating = true;
 
         let prevHref = this._href;
-        let nextHref = this._getHref(location);
+        let nextHref = this._getHref(compileHref(location, state));
 
         for (let callback of [
             ...this._handlers.navigationstart,
@@ -216,16 +220,16 @@ export class Route {
      * Adds an entry to the browser's session history
      * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState).
      */
-    assign(location: LocationValue) {
-        this._navigate(location, 'assign');
+    assign<T extends LocationValue>(location: T, state?: URLData<T>) {
+        this._navigate(location, state, 'assign');
     }
 
     /**
      * Replaces the current history entry
      * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).
      */
-    replace(location: LocationValue) {
-        this._navigate(location, 'replace');
+    replace<T extends LocationValue>(location: T, state?: URLData<T>) {
+        this._navigate(location, state, 'replace');
     }
 
     reload() {
