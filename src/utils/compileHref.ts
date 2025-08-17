@@ -1,7 +1,7 @@
+import {QuasiURL} from 'quasiurl';
 import type {LocationValue} from '../types/LocationValue';
 import type {URLData} from '../types/URLData';
 import {isLocationObject} from './isLocationObject';
-import {QuasiURL} from 'quasiurl';
 
 export function compileHref<T extends LocationValue>(
     location: T | undefined,
