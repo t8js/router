@@ -74,7 +74,7 @@ console.log(ok, params.id);
 route.observe(document);
 ```
 
-The above line turns all `a` and `area` elements in the `document` to SPA route links enabling navigation without page reloads via History API.
+The above line turns all `<a>` and `<area>` elements in the `document` to SPA route links enabling navigation without page reloads via the History API.
 
 🔹 `route.observe(container, elements)` accepts a container element (it can be `document`, as in the example above) and optionally `elements` (which can be a selector or HTML elements).
 
