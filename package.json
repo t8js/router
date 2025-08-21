@@ -9,7 +9,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/t8dash/router.git"
+    "url": "git+https://github.com/t8js/router.git"
   },
   "license": "ISC",
   "author": "axtk",

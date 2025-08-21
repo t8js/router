@@ -81,4 +81,4 @@ The above line turns all `<a>` and `<area>` elements in the `document` to SPA ro
 ---
 
 - [Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts)
-- [React router](https://github.com/t8dash/react-router)
+- [React router](https://github.com/t8js/react-router)
