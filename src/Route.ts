@@ -32,6 +32,7 @@ export class Route {
 
     connect(location?: LocationValue) {
         this.connected = true;
+        this._href = this._getHref(location);
 
         if (typeof window !== 'undefined') {
             let handleNavigation = () => {
