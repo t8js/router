@@ -1,5 +1,5 @@
-import type {LinkNavigationProps} from './types/LinkNavigationProps';
-import type {NavigationMode} from './types/NavigationMode';
+import type {LinkNavigationProps} from '../types/LinkNavigationProps';
+import type {NavigationMode} from '../types/NavigationMode';
 
 export function getNavigationMode(
     x: HTMLElement | LinkNavigationProps,
