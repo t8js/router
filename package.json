@@ -20,11 +20,15 @@
     "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral",
     "prepublishOnly": "npm run build",
-    "preversion": "npx npm-run-all shape build",
-    "shape": "npx codeshape"
+    "preversion": "npx npm-run-all typecheck shape build",
+    "shape": "npx codeshape",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "quasiurl": "^1.0.0",
     "unpack-schema": "^1.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
   }
 }
