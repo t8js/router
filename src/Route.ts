@@ -74,8 +74,7 @@ export class Route {
     }
 
     _init(location?: LocationValue) {
-        if (typeof window === 'undefined')
-            return;
+        if (typeof window === 'undefined') return;
 
         let handleNavigation = () => {
             this._navigate();
