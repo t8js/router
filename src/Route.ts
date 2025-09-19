@@ -33,25 +33,7 @@ export class Route {
     connect(location?: LocationValue) {
         this.connected = true;
         this._href = this._getHref(location);
-
-        if (typeof window !== 'undefined') {
-            let handleNavigation = () => {
-                this._navigate();
-            };
-
-            window.addEventListener('popstate', handleNavigation);
-
-            this._cleanup = () => {
-                window.removeEventListener('popstate', handleNavigation);
-            };
-
-            // Allow setting up event handlers before the first navigation.
-            setTimeout(() => {
-                this._navigate(location).then(() => {
-                    this._navigated = true;
-                });
-            }, 0);
-        }
+        this._init(location);
 
         return this;
     }
@@ -89,6 +71,28 @@ export class Route {
                     this._handlers[event].splice(i, 1);
             }
         };
+    }
+
+    _init(location?: LocationValue) {
+        if (typeof window === 'undefined')
+            return;
+
+        let handleNavigation = () => {
+            this._navigate();
+        };
+
+        window.addEventListener('popstate', handleNavigation);
+
+        this._cleanup = () => {
+            window.removeEventListener('popstate', handleNavigation);
+        };
+
+        // Allow setting up event handlers before the first navigation.
+        setTimeout(() => {
+            this._navigate(location).then(() => {
+                this._navigated = true;
+            });
+        }, 0);
     }
 
     _getHref(location: LocationValue) {
