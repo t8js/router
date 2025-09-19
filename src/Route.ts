@@ -248,6 +248,7 @@ export class Route {
      * from the current entry.
      */
     go(delta: number): void {
+        // biome-ignore lint/complexity/useOptionalChain: `window?.history` won't work for Node
         if (typeof window !== 'undefined' && window.history)
             window.history.go(delta);
     }
