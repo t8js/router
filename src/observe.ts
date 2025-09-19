@@ -56,10 +56,7 @@ export function observe(
         if (!activeElement) return;
 
         event.preventDefault();
-
-        if (getNavigationMode(activeElement) === 'replace')
-            route.replace(activeElement.href);
-        else route.assign(activeElement.href);
+        route._navigate(activeElement.href, getNavigationMode(activeElement));
     };
 
     document.addEventListener('click', handleClick);
