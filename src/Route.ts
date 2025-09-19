@@ -76,15 +76,9 @@ export class Route {
     _init(location?: LocationValue) {
         if (typeof window === 'undefined') return;
 
-        let handleNavigation = () => {
+        this._cleanup = this._subscribe(() => {
             this._navigate();
-        };
-
-        window.addEventListener('popstate', handleNavigation);
-
-        this._cleanup = () => {
-            window.removeEventListener('popstate', handleNavigation);
-        };
+        });
 
         // Allow setting up event handlers before the first navigation.
         setTimeout(() => {
@@ -92,6 +86,14 @@ export class Route {
                 this._navigated = true;
             });
         }, 0);
+    }
+
+    _subscribe(eventHandler: () => void): () => void {
+        window.addEventListener('popstate', eventHandler);
+
+        return () => {
+            window.removeEventListener('popstate', eventHandler);
+        };
     }
 
     _getHref(location: LocationValue) {
