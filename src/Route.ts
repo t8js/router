@@ -98,7 +98,7 @@ export class Route {
         };
     }
 
-    _getHref(location: LocationValue) {
+    _getHref(location?: LocationValue) {
         let url: string;
 
         if (location === undefined || location === null)
@@ -128,11 +128,15 @@ export class Route {
         let prevHref = this._href;
         let nextHref = this._getHref(location);
 
-        for (let callback of [
-            ...this._handlers.navigationstart,
-            this._transition,
-        ]) {
+        for (let callback of this._handlers.navigationstart) {
             let result = callback(nextHref, prevHref, navigationMode);
+
+            if ((result instanceof Promise ? await result : result) === false)
+                return;
+        }
+
+        if (this._navigated || this._getHref() !== nextHref) {
+            let result = this._transition(nextHref, prevHref, navigationMode);
 
             if ((result instanceof Promise ? await result : result) === false)
                 return;
@@ -160,12 +164,6 @@ export class Route {
         navigationMode = 'assign',
     ) => {
         if (typeof window === 'undefined') return;
-
-        if (
-            !this._navigated &&
-            this._getHref(window.location.href) === nextHref
-        )
-            return;
 
         if (!window.history || !isSameOrigin(nextHref)) {
             switch (navigationMode) {
