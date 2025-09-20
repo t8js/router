@@ -76,9 +76,7 @@ export class Route {
     _init(location?: LocationValue) {
         if (typeof window === 'undefined') return;
 
-        this._cleanup = this._subscribe(() => {
-            this._navigate();
-        });
+        this._cleanup = this._subscribe();
 
         // Allow setting up event handlers before the first navigation.
         setTimeout(() => {
@@ -88,11 +86,15 @@ export class Route {
         }, 0);
     }
 
-    _subscribe(eventHandler: () => void): () => void {
-        window.addEventListener('popstate', eventHandler);
+    _subscribe(): () => void {
+        let navigationHandler = () => {
+            this._navigate();
+        };
+
+        window.addEventListener('popstate', navigationHandler);
 
         return () => {
-            window.removeEventListener('popstate', eventHandler);
+            window.removeEventListener('popstate', navigationHandler);
         };
     }
 
