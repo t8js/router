@@ -79,11 +79,11 @@ export class Route {
         this._cleanup = this._subscribe();
 
         // Allow setting up event handlers before the first navigation.
-        setTimeout(() => {
-            this._navigate(location).then(() => {
+        Promise.resolve()
+            .then(() => this._navigate(location))
+            .then(() => {
                 this._navigated = true;
             });
-        }, 0);
     }
 
     _subscribe(): () => void {
