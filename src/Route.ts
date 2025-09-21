@@ -158,11 +158,11 @@ export class Route {
             await this._navigate.apply(this, pendingNavigation);
     }
 
-    _transition: NavigationCallback = (
-        nextHref,
-        _prevHref,
+    _transition(
+        nextHref: string,
+        _prevHref: string,
         navigationMode = 'assign',
-    ) => {
+    ): ReturnType<NavigationCallback> {
         if (typeof window === 'undefined') return;
 
         if (!window.history || !isSameOrigin(nextHref)) {
