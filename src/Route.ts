@@ -186,7 +186,7 @@ export class Route {
                 window.history.replaceState({}, '', nextHref);
                 break;
         }
-    };
+    }
 
     /**
      * Matches the current location against the location pattern.
