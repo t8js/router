@@ -1,6 +1,7 @@
 {
     "include": [
         "index.ts",
+        "playwright.config.ts",
         "src/**/*"
     ],
     "compilerOptions": {
