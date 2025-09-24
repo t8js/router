@@ -1,5 +1,5 @@
 type ConfigShape = {
-    strict?: boolean;
+  strict?: boolean;
 };
 
 export interface Config extends ConfigShape {}

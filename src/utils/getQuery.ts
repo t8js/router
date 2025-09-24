@@ -1,7 +1,7 @@
 export function getQuery(href: string): Record<string, string> {
-    let queryIndex = href.indexOf('?');
+  let queryIndex = href.indexOf("?");
 
-    if (queryIndex === -1) return {};
+  if (queryIndex === -1) return {};
 
-    return Object.fromEntries(new URLSearchParams(href.slice(queryIndex)));
+  return Object.fromEntries(new URLSearchParams(href.slice(queryIndex)));
 }

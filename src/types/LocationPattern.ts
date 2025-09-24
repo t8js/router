@@ -1,7 +1,7 @@
-import type {Config} from './Config';
-import type {LocationValue} from './LocationValue';
+import type { Config } from "./Config";
+import type { LocationValue } from "./LocationValue";
 
 export type LocationPattern<C extends Config = Config> =
-    C['strict'] extends true
-        ? LocationValue | LocationValue[]
-        : LocationValue | RegExp | (LocationValue | RegExp)[];
+  C["strict"] extends true
+    ? LocationValue | LocationValue[]
+    : LocationValue | RegExp | (LocationValue | RegExp)[];

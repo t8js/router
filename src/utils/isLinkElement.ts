@@ -1,5 +1,5 @@
 export function isLinkElement(
-    x: unknown,
+  x: unknown,
 ): x is HTMLAnchorElement | HTMLAreaElement {
-    return x instanceof HTMLAnchorElement || x instanceof HTMLAreaElement;
+  return x instanceof HTMLAnchorElement || x instanceof HTMLAreaElement;
 }

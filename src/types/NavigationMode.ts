@@ -1,1 +1,1 @@
-export type NavigationMode = 'assign' | 'replace';
+export type NavigationMode = "assign" | "replace";
