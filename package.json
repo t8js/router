@@ -19,7 +19,7 @@
     "build": "npx npm-run-all clean compile",
     "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral",
-    "play": "npx @t8/serve 3000 * playground -b",
+    "demo": "npx @t8/serve 3000 * tests -b",
     "prepublishOnly": "npm run build",
     "preversion": "npx npm-run-all typecheck shape build test",
     "shape": "npx codeshape",
