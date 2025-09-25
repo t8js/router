@@ -1,33 +1,49 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+class Playground {
+  readonly page: Page;
+  constructor(page: Page) {
+    this.page = page;
+  }
+  async clickLink(name: string) {
+    await this.page.getByRole("link", { name }).click();
+  }
+  async hasPath(value: string) {
+    await expect(this.page).toHaveURL(({ pathname }) => pathname === value);
+  }
+  async hasMainTitle() {
+    await expect(this.page.locator("h1")).toBeVisible();
+  }
+  async hasSectionTitle(value: string) {
+    await expect(this.page.locator("h2:visible")).toHaveText(value);
+  }
+  async hasFullHeader() {
+    await expect(this.page.locator("header")).toHaveClass("full");
+  }
+  async hasCompactHeader() {
+    await expect(this.page.locator("header")).toHaveClass("compact");
+  }
+}
 
 test("route links", async ({ page }) => {
+  let p = new Playground(page);
+
   await page.goto("/");
+  await p.hasMainTitle();
+  await p.hasFullHeader();
 
-  await expect(page.getByRole("heading", { name: "App" })).toBeVisible();
+  await p.clickLink("Section 1");
+  await p.hasPath("/sections/1");
+  await p.hasSectionTitle("Section 1");
+  await p.hasCompactHeader();
 
-  await page.getByRole("link", { name: "Section 1" }).click();
-  await expect(page).toHaveURL(({ pathname }) => pathname === "/sections/1");
-  await expect(page.getByRole("heading", { name: "Intro" })).not.toBeVisible();
-  await expect(page.getByRole("heading", { name: "Section 1" })).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Section 2" }),
-  ).not.toBeVisible();
+  await p.clickLink("Section 2");
+  await p.hasPath("/sections/2");
+  await p.hasSectionTitle("Section 2");
+  await p.hasCompactHeader();
 
-  await page.getByRole("link", { name: "Section 2" }).click();
-  await expect(page).toHaveURL(({ pathname }) => pathname === "/sections/2");
-  await expect(page.getByRole("heading", { name: "Intro" })).not.toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Section 1" }),
-  ).not.toBeVisible();
-  await expect(page.getByRole("heading", { name: "Section 2" })).toBeVisible();
-
-  await page.getByRole("link", { name: "Intro" }).click();
-  await expect(page).toHaveURL(({ pathname }) => pathname === "/");
-  await expect(page.getByRole("heading", { name: "Intro" })).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Section 1" }),
-  ).not.toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Section 2" }),
-  ).not.toBeVisible();
+  await p.clickLink("Intro");
+  await p.hasPath("/");
+  await p.hasSectionTitle("Intro");
+  await p.hasFullHeader();
 });
