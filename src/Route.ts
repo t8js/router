@@ -129,13 +129,15 @@ export class Route {
     for (let callback of this._handlers.navigationstart) {
       let result = callback(nextHref, prevHref, navigationMode);
 
-      if ((result instanceof Promise ? await result : result) === false) return;
+      if ((result instanceof Promise ? await result : result) === false)
+        return this._end();
     }
 
     if (this._navigated || this._getHref() !== nextHref) {
       let result = this._transition(nextHref, prevHref, navigationMode);
 
-      if ((result instanceof Promise ? await result : result) === false) return;
+      if ((result instanceof Promise ? await result : result) === false)
+        return this._end();
     }
 
     this._href = nextHref;
@@ -146,6 +148,10 @@ export class Route {
       if (result instanceof Promise) await result;
     }
 
+    await this._end();
+  }
+
+  async _end() {
     this.navigating = false;
 
     let pendingNavigation = this._navigationQueue.shift();
