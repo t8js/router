@@ -47,3 +47,21 @@ test("route links", async ({ page }) => {
   await p.hasSectionTitle("Intro");
   await p.hasFullHeader();
 });
+
+test("non-root url", async ({ page }) => {
+  let p = new Playground(page);
+
+  await page.goto("/sections/10");
+  await p.hasSectionTitle("Section 10");
+  await p.hasCompactHeader();
+
+  await p.clickLink("Intro");
+  await p.hasPath("/");
+  await p.hasSectionTitle("Intro");
+  await p.hasFullHeader();
+
+  await p.clickLink("Section 1");
+  await p.hasPath("/sections/1");
+  await p.hasSectionTitle("Section 1");
+  await p.hasCompactHeader();
+});
