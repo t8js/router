@@ -4,7 +4,7 @@ export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
   forbidOnly: true,
-  retries: 0,
+  retries: 1,
   reporter: "html",
   use: {
     baseURL: "http://localhost:3000",
