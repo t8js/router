@@ -5,7 +5,7 @@ let route = new Route();
 
 route.on("navigationstart", href => {
   if (href === "/") {
-    route.assign("/sections/1");
+    route.assign("/sections/1"); // redirection
     return false;
   }
 });
