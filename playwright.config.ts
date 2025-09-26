@@ -3,7 +3,8 @@ import { defineConfig, devices } from "@playwright/test";
 export default defineConfig({
   testDir: "./tests",
   fullyParallel: true,
-  forbidOnly: true,
+  forbidOnly: false,
+  workers: 1,
   retries: 1,
   reporter: "html",
   use: {
@@ -24,8 +25,8 @@ export default defineConfig({
       use: { ...devices["Desktop Safari"] },
     },
   ],
-  webServer: {
-    command: "npm run demo",
-    url: "http://localhost:3000",
-  },
+  // webServer: {
+  //   command: "npm run demo",
+  //   url: "http://localhost:3000",
+  // },
 });

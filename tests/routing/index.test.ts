@@ -1,4 +1,5 @@
 import { expect, type Page, test } from "@playwright/test";
+import { serve, type Server } from "@t8/serve";
 
 class Playground {
   readonly page: Page;
@@ -24,6 +25,19 @@ class Playground {
     await expect(this.page.locator("header")).toHaveClass("compact");
   }
 }
+
+let server: Server;
+
+test.beforeAll(async () => {
+  server = await serve({
+    path: "tests/routing",
+    spa: true,
+  });
+});
+
+test.afterAll(() => {
+  server.close();
+});
 
 test("route links", async ({ page }) => {
   let p = new Playground(page);

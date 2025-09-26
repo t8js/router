@@ -1,4 +1,4 @@
-import { Route } from "..";
+import { Route } from "../..";
 import "./index.css";
 
 let route = new Route();
