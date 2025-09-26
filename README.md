@@ -9,7 +9,7 @@ Installation: `npm i @t8/router`
 ## Initialization
 
 ```js
-import {Route} from '@t8/router';
+import { Route } from "@t8/router";
 
 let route = new Route();
 ```
@@ -19,11 +19,11 @@ let route = new Route();
 ## Navigation
 
 ```diff
-- window.location.assign('/intro');
-+ route.assign('/intro');
+- window.location.assign("/intro");
++ route.assign("/intro");
 
-- window.location.replace('/intro');
-+ route.replace('/intro');
+- window.location.replace("/intro");
++ route.replace("/intro");
 
 - console.log(window.location.href);
 + console.log(route.href);
@@ -32,21 +32,21 @@ let route = new Route();
 ## Events & Middleware
 
 ```js
-route.on('navigationstart', href => {
-    if (hasUnsavedChanges)
-        return false; // prevents navigation
+route.on("navigationstart", href => {
+  if (hasUnsavedChanges)
+    return false; // prevents navigation
 
-    if (href === '/') {
-        route.assign('/intro');
-        return false; // prevents navigation
-    }
+  if (href === "/") {
+    route.assign("/intro"); // redirection
+    return false; // prevents navigation
+  }
 });
 ```
 
 ```js
-route.on('navigationcomplete', href => {
-    if (href === '/intro')
-        document.title = 'Intro';
+route.on("navigationcomplete", href => {
+  if (href === "/intro")
+    document.title = "Intro";
 });
 ```
 
@@ -55,13 +55,13 @@ route.on('navigationcomplete', href => {
 ## Route matching
 
 ```js
-console.log(route.href === '/intro');
-console.log(route.href.startsWith('/sections'));
+console.log(route.href === "/intro");
+console.log(route.href.startsWith("/sections/"));
 console.log(/\/sections\/\d+\/?/.test(route.href));
 ```
 
 ```js
-let {ok, params} = route.match(/\/sections\/(?<id>\d+)\/?/);
+let { ok, params } = route.match(/^\/sections\/(?<id>\d+)\/?/);
 
 console.log(ok, params.id);
 ```
