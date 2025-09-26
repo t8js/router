@@ -10,7 +10,7 @@ class Playground {
     await this.page.getByRole("link", { name }).click();
   }
   async hasPath(value: string) {
-    await expect(this.page).toHaveURL(({ pathname }) => pathname === value);
+    await expect(this.page).toHaveURL(({ pathname, search }) => pathname + search === value);
   }
   async hasSectionTitle(value: string) {
     await expect(this.page.locator("h2:visible")).toHaveText(value);
