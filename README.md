@@ -14,7 +14,7 @@ import { Route } from "@t8/router";
 let route = new Route();
 ```
 
-🔹 The `new Route(location)` constructor accepts an optional URL location. If omitted, it's the browser's current URL.
+🔹 The `new Route(location)` constructor accepts an optional URL location. In the browser, the current URL is implied if `location` is omitted.
 
 ## Navigation
 
@@ -57,7 +57,7 @@ route.on("navigationcomplete", href => {
 ```js
 console.log(route.href === "/intro");
 console.log(route.href.startsWith("/sections/"));
-console.log(/\/sections\/\d+\/?/.test(route.href));
+console.log(/^\/sections\/\d+\/?/.test(route.href));
 ```
 
 ```js
@@ -66,7 +66,7 @@ let { ok, params } = route.match(/^\/sections\/(?<id>\d+)\/?/);
 console.log(ok, params.id);
 ```
 
-🔹 Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by `url-shape`, to the `route.match(pattern)` method.
+🔹 Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by *url-shape*, to the `route.match(pattern)` method.
 
 ## Converting HTML links to SPA route links
 
