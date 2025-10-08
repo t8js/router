@@ -14,9 +14,9 @@ import { isSameOrigin } from "./utils/isSameOrigin";
 export class Route {
   _href = "";
   _cleanup: (() => void) | null = null;
-  _handlers: Record<NavigationEvent, NavigationCallback[]> = {
-    navigationstart: [],
-    navigationcomplete: [],
+  _handlers: Record<NavigationEvent, Set<NavigationCallback>> = {
+    navigationstart: new Set(),
+    navigationcomplete: new Set(),
   };
   _navigationQueue: [LocationValue | undefined, NavigationMode | undefined][] =
     [];
@@ -59,15 +59,12 @@ export class Route {
     if (!(event in this._handlers))
       throw new Error(`Unknown event type: '${event}'`);
 
-    this._handlers[event].push(callback);
+    this._handlers[event].add(callback);
 
     if (this.connected && this._navigated) callback(this.href, this.href);
 
     return () => {
-      for (let i = this._handlers[event].length - 1; i >= 0; i--) {
-        if (this._handlers[event][i] === callback)
-          this._handlers[event].splice(i, 1);
-      }
+      this._handlers[event].delete(callback);
     };
   }
 
