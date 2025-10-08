@@ -17,7 +17,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "npx npm-run-all clean compile",
-    "clean": "node -e \"require('node:fs').rmSync('dist', {force: true, recursive: true});\"",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { force: true, recursive: true });\"",
     "compile": "npx esbuild index.ts --bundle --outdir=dist --platform=neutral",
     "demo": "npx @t8/serve 3000 * tests/routing -b",
     "prepublishOnly": "npm run build",
@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",
-    "@t8/serve": "^0.1.19",
+    "@t8/serve": "^0.1.29",
     "@types/node": "^24.5.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   }
 }
