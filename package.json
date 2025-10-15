@@ -11,7 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/t8js/router.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "author": "axtk",
   "type": "module",
   "main": "dist/index.js",
