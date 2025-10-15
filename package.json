@@ -27,13 +27,13 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@playwright/test": "^1.55.1",
-    "@t8/serve": "^0.1.29",
+    "@playwright/test": "^1.56.0",
+    "@t8/serve": "^0.1.30",
     "@types/node": "^24.5.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "quasiurl": "^1.0.2",
-    "unpack-schema": "^1.2.4"
+    "quasiurl": "^1.0.3",
+    "unpack-schema": "^1.2.5"
   }
 }
