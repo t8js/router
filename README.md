@@ -2,7 +2,7 @@
 
 # @t8/router
 
-*Vanilla JS/TS browser history router*
+*Vanilla JS/TS router*
 
 Installation: `npm i @t8/router`
 
