@@ -4,8 +4,56 @@
 
 *Vanilla JS/TS router*
 
+<!-- docsgen-hide-start -->
 - Concise API for SPA navigation
 - Flexible URL pattern matching for URL-based rendering
+<!-- docsgen-hide-end -->
+
+<!-- docsgen-show-start --
+🔹 Concise API for SPA navigation
+
+```js
+let route = new Route();
+
+route.observe(document); // enable SPA links
+```
+
+```diff
+- window.location.assign("/about");
++ route.assign("/about");
+```
+
+🔹 Flexible URL pattern matching for URL-based rendering
+
+```js
+header.className = route.href === "/" ? "full" : "compact";
+```
+
+```js
+header.className = route.at("/", "full", "compact");
+// at "/" ? "full" : "compact"
+```
+
+```js
+h1.textContent = route.at(
+  /^\/sections\/(?<id>\d+)\/?/,
+  ({ params }) => `Section ${params.id}`
+);
+// at "/sections/<id>" ? "Section <id>" : undefined
+```
+
+🔹 Navigation middleware
+
+```js
+route.on("navigationstart", callback);
+// e.g. to redirect or prevent navigation
+```
+
+```js
+route.on("navigationcomplete", callback);
+// e.g. to set the document's title
+```
+-- docsgen-show-end -->
 
 Installation: `npm i @t8/router`
 
