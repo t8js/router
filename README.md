@@ -29,6 +29,8 @@ let route = new Route();
 + console.log(route.href);
 ```
 
+🔹 The route navigation API is largely in line with the built-in navigation APIs. An instance of `Route` exposes: `.assign(url)`, `.replace(url)`, `.reload()`, `.href`, `.pathname`, `.search`, `.hash`, `.back()`, `.forward()`, `.go(delta)` — similar to the built-in APIs of `window.location` and `history` carried over to route-based SPA navigation.
+
 ## Events & Middleware
 
 ```js
@@ -66,7 +68,18 @@ let { ok, params } = route.match(/^\/sections\/(?<id>\d+)\/?/);
 console.log(ok, params.id);
 ```
 
-🔹 Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by *url-shape*, to the `route.match(pattern)` method.
+```js
+header.className = route.at("/intro", "full", "compact");
+// at "/intro" ? "full" : "compact"
+
+h1.textContent = route.at(
+  /^\/sections\/(?<id>\d+)\/?/,
+  ({ params }) => `Section ${params.id}`
+);
+// at "/sections/<id>" ? "Section <id>" : undefined
+```
+
+🔹 Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by [*url-shape*](https://github.com/t8js/url-shape#readme), to `route.match(pattern)` or `route.at(pattern, x, y)`.
 
 ## Converting HTML links to SPA route links
 
@@ -74,7 +87,7 @@ console.log(ok, params.id);
 route.observe(document);
 ```
 
-The above line turns all `<a>` and `<area>` elements in the `document` to SPA route links enabling navigation without page reloads via the History API.
+The above line turns all `<a>` and `<area>` elements in the `document` to SPA route links enabling navigation without page reloads via the `route` object.
 
 🔹 `route.observe(container, elements)` accepts a container element (it can be `document`, as in the example above) and optionally `elements` (which can be a selector or HTML elements).
 
