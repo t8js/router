@@ -48,7 +48,7 @@ export class Route {
     /**
      * A selector, or an HTML element, or a collection thereof.
      *
-     * @defaultValue 'a, area'
+     * @defaultValue "a, area"
      */
     elements?: Parameters<typeof observe>[2],
   ) {
@@ -199,14 +199,24 @@ export class Route {
   }
 
   /**
-   * Loosely resembles the conditional ternary operator (`condition ? x : y`):
-   * if the current location matches the location pattern the returned value
-   * is based on the second parameter, otherwise on the third parameter.
+   * Loosely resembles the conditional ternary operator
+   * `matchesLocationPattern ? x : y`: if the current location matches
+   * `locationPattern` the returned value is based on the second parameter,
+   * otherwise on the third parameter.
    *
-   * `.evaluate(locationPattern, x, y)` returns either `x({params})` or
-   * `y({params})` if they are functions, `x` or `y` themselves otherwise.
+   * If the current location matches `locationPattern`,
+   * `.at(locationPattern, x, y)` returns:
+   * - `x`, if `x` is not a function;
+   * - `x({ params })`, if `x` is a function, with `params` extracted from
+   * the current location.
+   *
+   * If the current location doesn't match `locationPattern`,
+   * `.at(locationPattern, x, y)` returns:
+   * - `y`, if `y` is not a function;
+   * - `y({ params })`, if `y` is a function, with `params` extracted from
+   * the current location.
    */
-  resolve<P extends LocationPattern, X = undefined, Y = undefined>(
+  at<P extends LocationPattern, X = undefined, Y = undefined>(
     locationPattern: P,
     matchOutput?: X | MatchHandler<P, X>,
     mismatchOutput?: Y | MatchHandler<P, Y>,
@@ -225,7 +235,7 @@ export class Route {
 
   /**
    * Adds an entry to the browser's session history
-   * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState).
+   * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
   assign(location: LocationValue) {
     this._navigate(location, "assign");
@@ -233,7 +243,7 @@ export class Route {
 
   /**
    * Replaces the current history entry
-   * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState).
+   * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
   replace(location: LocationValue) {
     this._navigate(location, "replace");
@@ -281,7 +291,7 @@ export class Route {
   }
 
   /**
-   * Returns the current location, equals `.href`.
+   * Returns the current location, equal to `.href`.
    */
   toString(): string {
     return this._href;
