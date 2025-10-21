@@ -36,7 +36,7 @@ header.className = route.at("/", "full", "compact");
 ```
 
 ```js
-h1.textContent = route.at(
+let sectionTitle = route.at(
   /^\/sections\/(?<id>\d+)\/?/,
   ({ params }) => `Section ${params.id}`
 );
@@ -124,7 +124,7 @@ console.log(ok, params.id);
 header.className = route.at("/", "full", "compact");
 // at "/" ? "full" : "compact"
 
-h1.textContent = route.at(
+let sectionTitle = route.at(
   /^\/sections\/(?<id>\d+)\/?/,
   ({ params }) => `Section ${params.id}`
 );
