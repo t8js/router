@@ -20,8 +20,8 @@ route.observe(document); // enable SPA links
 ```
 
 ```diff
-- window.location.assign("/about");
-+ route.assign("/about");
+- window.location.assign("/intro");
++ route.assign("/intro");
 ```
 
 🔹 Flexible URL pattern matching for URL-based rendering
@@ -121,8 +121,8 @@ console.log(ok, params.id);
 ```
 
 ```js
-header.className = route.at("/intro", "full", "compact");
-// at "/intro" ? "full" : "compact"
+header.className = route.at("/", "full", "compact");
+// at "/" ? "full" : "compact"
 
 h1.textContent = route.at(
   /^\/sections\/(?<id>\d+)\/?/,
