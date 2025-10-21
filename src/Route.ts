@@ -216,18 +216,18 @@ export class Route {
    * - `y({ params })`, if `y` is a function, with `params` extracted from
    * the current location.
    */
-  at<P extends LocationPattern, X = undefined>(
+  at<P extends LocationPattern, X>(
     locationPattern: P,
     matchOutput: X | MatchHandler<P, X>,
   ): X | undefined;
 
-  at<P extends LocationPattern, X = undefined, Y = undefined>(
+  at<P extends LocationPattern, X, Y>(
     locationPattern: P,
     matchOutput: X | MatchHandler<P, X>,
     mismatchOutput: Y | MatchHandler<P, Y>,
   ): X | Y;
 
-  at<P extends LocationPattern, X = undefined, Y = undefined>(
+  at<P extends LocationPattern, X, Y>(
     locationPattern: P,
     matchOutput: X | MatchHandler<P, X>,
     mismatchOutput?: Y | MatchHandler<P, Y>,
