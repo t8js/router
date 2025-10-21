@@ -4,6 +4,9 @@
 
 *Vanilla JS/TS router*
 
+- Concise API for SPA navigation
+- Flexible URL pattern matching for URL-based rendering
+
 Installation: `npm i @t8/router`
 
 ## Initialization
