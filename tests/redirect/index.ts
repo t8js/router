@@ -18,7 +18,11 @@ route.on("navigationcomplete", () => {
 route.observe(document);
 
 function renderHeader() {
-  document.querySelector("header")!.className = route.at("/", "full", "compact")!;
+  document.querySelector("header")!.className = route.at(
+    "/",
+    "full",
+    "compact",
+  )!;
 }
 
 function renderMainContent() {
