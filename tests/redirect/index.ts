@@ -22,7 +22,7 @@ function renderHeader() {
     "/",
     "full",
     "compact",
-  )!;
+  );
 }
 
 function renderMainContent() {
