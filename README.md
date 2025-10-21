@@ -7,6 +7,7 @@
 <!-- docsgen-hide-start -->
 - Concise API for SPA navigation
 - Flexible URL pattern matching for URL-based rendering
+- Navigation middleware
 <!-- docsgen-hide-end -->
 
 <!-- docsgen-show-start --
