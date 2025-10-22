@@ -289,16 +289,34 @@ export class Route {
     this._navigate(location);
   }
 
-  get pathname() {
+  get pathname(): string {
     return new QuasiURL(this._href).pathname;
   }
 
-  get search() {
+  set pathname(value: LocationValue) {
+    let url = new QuasiURL(this._href);
+    url.pathname = value ? String(value) : "";
+    this._navigate(url.href);
+  }
+
+  get search(): string {
     return new QuasiURL(this._href).search;
+  }
+
+  set search(value: string | URLSearchParams) {
+    let url = new QuasiURL(this._href);
+    url.search = value;
+    this._navigate(url.href);
   }
 
   get hash() {
     return new QuasiURL(this._href).hash;
+  }
+
+  set hash(value: string) {
+    let url = new QuasiURL(this._href);
+    url.hash = value;
+    this._navigate(url.href);
   }
 
   /**
