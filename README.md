@@ -23,8 +23,8 @@ route.observe(document); // enable SPA links
 - window.location.assign("/intro");
 + route.assign("/intro");
 
-- window.location.href
-+ route.href
+- window.location.href = "/intro";
++ route.href = "/intro";
 ```
 
 🔹 Flexible URL pattern matching for URL-based rendering
@@ -79,6 +79,9 @@ let route = new Route();
 
 - window.location.replace("/intro");
 + route.replace("/intro");
+
+- window.location.href = "/intro";
++ route.href = "/intro";
 
 - console.log(window.location.href);
 + console.log(route.href);
