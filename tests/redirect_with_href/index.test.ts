@@ -27,6 +27,7 @@ let server: Server;
 test.beforeAll(async () => {
   server = await serve({
     path: "tests/redirect_with_href",
+    bundle: true,
     spa: true,
   });
 });

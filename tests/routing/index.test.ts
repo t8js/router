@@ -33,6 +33,7 @@ let server: Server;
 test.beforeAll(async () => {
   server = await serve({
     path: "tests/routing",
+    bundle: true,
     spa: true,
   });
 });
