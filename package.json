@@ -33,7 +33,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "quasiurl": "^1.1.1",
+    "quasiurl": "^1.1.2",
     "unpack-schema": "^1.2.5"
   }
 }
