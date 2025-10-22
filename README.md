@@ -22,6 +22,9 @@ route.observe(document); // enable SPA links
 ```diff
 - window.location.assign("/intro");
 + route.assign("/intro");
+
+- window.location.href
++ route.href
 ```
 
 🔹 Flexible URL pattern matching for URL-based rendering
