@@ -16,7 +16,7 @@
 ```js
 let route = new Route();
 
-route.observe(document); // enable SPA links
+route.observe(document); // switch links to SPA navigation mode
 ```
 
 ```diff
