@@ -1,48 +1,18 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import type { LocationPattern } from "./LocationPattern";
-import type { LocationShape } from "./LocationShape";
-import type { URLSchema } from "./URLSchema";
+import type { LocationPattern } from "../types/LocationPattern";
+import { URLSchema } from "../types/URLSchema";
 
-type WithFallback<T, Fallback> = T extends undefined
-  ? Fallback
-  : T extends null
-    ? Fallback
-    : T;
-
-type EmptyRecord<T> = T extends undefined
-  ? Record<string, never>
-  : T extends Record<string, unknown> | undefined
-    ? Record<string, never> | { [K in keyof NonNullable<T>]: undefined }
-    : Record<string, never>;
-
-type NormalizedParams<T extends LocationShape | undefined> = WithFallback<
-  {
-    params: WithFallback<
-      NonNullable<T>["params"],
-      EmptyRecord<NonNullable<T>["params"]>
-    >;
-    query: WithFallback<
-      NonNullable<T>["query"],
-      EmptyRecord<NonNullable<T>["query"]>
-    >;
-  },
-  {
-    params: Record<string, never>;
-    query: Record<string, never>;
-  }
->;
-
-type BaseMatchState = {
+export type MatchState<P extends LocationPattern> = {
   ok: boolean;
   href: string;
+  params: P extends { _schema: URLSchema }
+    ? StandardSchemaV1.InferOutput<P["_schema"]> extends { params?: Record<string, unknown> }
+    ? StandardSchemaV1.InferOutput<P["_schema"]>["params"]
+    : Record<string, never>
+    : Record<string, string | undefined>;
+  query: P extends { _schema: URLSchema }
+    ? StandardSchemaV1.InferOutput<P["_schema"]> extends { query?: Record<string, unknown> }
+    ? StandardSchemaV1.InferOutput<P["_schema"]>["query"]
+    : Record<string, never>
+    : Record<string, string | undefined>;
 };
-
-export type MatchState<P extends LocationPattern> = P extends {
-  _schema: URLSchema;
-}
-  ? BaseMatchState &
-      NormalizedParams<StandardSchemaV1.InferOutput<P["_schema"]>>
-  : BaseMatchState & {
-      params: Record<string, string | undefined>;
-      query: Record<string, string | undefined>;
-    };

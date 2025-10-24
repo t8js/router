@@ -7,9 +7,10 @@ import type { NavigationCallback } from "./types/NavigationCallback";
 import type { NavigationEvent } from "./types/NavigationEvent";
 import type { NavigationMode } from "./types/NavigationMode";
 import type { URLData } from "./types/URLData";
-import { compileHref } from "./utils/compileHref";
-import { getMatchState } from "./utils/getMatchState";
 import { isSameOrigin } from "./utils/isSameOrigin";
+import { match } from "./utils/match";
+import { isLocationObject } from "./utils/isLocationObject";
+import { toStringMap } from "./utils/toStringMap";
 
 export class Route {
   _href = "";
@@ -94,17 +95,13 @@ export class Route {
   }
 
   _getHref(location?: LocationValue) {
-    let url: string;
+    let url = new QuasiURL(
+      String(location ?? (typeof window === "undefined" ? "" : window.location.href))
+    );
 
-    if (location === undefined || location === null)
-      url = typeof window === "undefined" ? "" : window.location.href;
-    else url = String(location);
+    if (isSameOrigin(url.href)) url.origin = "";
 
-    let { origin, pathname, search, hash, href } = new QuasiURL(url);
-
-    if (isSameOrigin(href)) origin = "";
-
-    return `${origin}${pathname}${search}${hash}`;
+    return url.href;
   }
 
   async _navigate<T extends LocationValue>(
@@ -165,37 +162,30 @@ export class Route {
     if (typeof window === "undefined") return;
 
     if (!window.history || !isSameOrigin(nextHref)) {
-      switch (navigationMode) {
-        case "assign":
-          window.location.assign(nextHref);
-          break;
-        case "replace":
-          window.location.replace(nextHref);
-          break;
-      }
-
+      window.location[navigationMode === "replace" ? "replace" : "assign"](nextHref);
       return;
     }
 
-    switch (navigationMode) {
-      case "assign":
-        window.history.pushState({}, "", nextHref);
-        break;
-      case "replace":
-        window.history.replaceState({}, "", nextHref);
-        break;
-    }
+    window.history[navigationMode === "replace" ? "replaceState" : "pushState"]({}, "", nextHref);
   }
 
   /**
    * Matches the current location against the location pattern.
    */
   match<P extends LocationPattern>(locationPattern: P) {
-    return getMatchState<P>(locationPattern, this._href);
+    return match<P>(locationPattern, this._href);
   }
 
-  compile<T extends LocationValue>(location: T, state?: URLData<T>) {
-    return compileHref(location, state);
+  compile<T extends LocationValue>(location: T, data?: URLData<T>) {
+    if (isLocationObject(location)) return location.compile(data);
+
+    let url = new QuasiURL(location ?? "");
+    let inputQuery = data?.query;
+
+    if (inputQuery)
+      url.search = new URLSearchParams(toStringMap(inputQuery));
+    
+    return url.href;
   }
 
   /**
@@ -232,7 +222,7 @@ export class Route {
     matchOutput: X | MatchHandler<P, X>,
     mismatchOutput?: Y | MatchHandler<P, Y>,
   ): X | Y | undefined {
-    let matchState = getMatchState<P>(locationPattern, this._href);
+    let matchState = match<P>(locationPattern, this._href);
 
     if (!matchState.ok)
       return typeof mismatchOutput === "function"
@@ -249,7 +239,7 @@ export class Route {
    * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
   assign(location: LocationValue) {
-    this._navigate(location, "assign");
+    this._navigate(location);
   }
 
   /**
