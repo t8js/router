@@ -31,11 +31,11 @@
     "@t8/serve": "^0.1.30",
     "@types/node": "^24.5.2",
     "typescript": "^5.9.3",
-    "url-shape": "^1.2.8",
+    "url-shape": "^1.3.1",
     "zod": "^4.1.12"
   },
   "dependencies": {
-    "quasiurl": "^1.1.2",
-    "unpack-schema": "^1.2.5"
+    "@standard-schema/spec": "^1.0.0",
+    "quasiurl": "^1.1.2"
   }
 }

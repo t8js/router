@@ -4,12 +4,12 @@ import { Route } from "../../src/Route";
 import "./index.css";
 
 let { url } = createURLSchema({
-  "/": null,
-  "/sections/:id": {
+  "/": z.object({}),
+  "/sections/:id": z.object({
     params: z.object({
       id: z.coerce.number(),
     }),
-  },
+  }),
 });
 
 let route = new Route();

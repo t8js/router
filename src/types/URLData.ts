@@ -1,9 +1,10 @@
-import type { UnpackedURLSchema, URLSchema } from "unpack-schema";
+import { StandardSchemaV1 } from "@standard-schema/spec";
 import type { LocationShape } from "./LocationShape";
 import type { LocationValue } from "./LocationValue";
+import { URLSchema } from "./URLSchema";
 
 export type URLData<T extends LocationValue = LocationValue> = T extends {
   _schema: URLSchema;
 }
-  ? UnpackedURLSchema<T["_schema"]>
+  ? StandardSchemaV1.InferOutput<T["_schema"]>
   : LocationShape;
