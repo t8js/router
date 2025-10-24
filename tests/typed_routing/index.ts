@@ -30,8 +30,9 @@ function renderMainContent() {
   let { ok, params } = route.match(url("/sections/:id"));
 
   if (ok)
-    document.querySelector('[data-id="section"] h2 span')!.textContent =
-      String(params.id);
+    document.querySelector('[data-id="section"] h2 span')!.textContent = String(
+      params.id,
+    );
 
   document
     .querySelector('main[data-id="intro"]')!

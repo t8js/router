@@ -1,7 +1,7 @@
-import { StandardSchemaV1 } from "@standard-schema/spec";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import type { LocationPattern } from "./LocationPattern";
 import type { LocationShape } from "./LocationShape";
-import { URLSchema } from "./URLSchema";
+import type { URLSchema } from "./URLSchema";
 
 type WithFallback<T, Fallback> = T extends undefined
   ? Fallback
@@ -40,7 +40,8 @@ type BaseMatchState = {
 export type MatchState<P extends LocationPattern> = P extends {
   _schema: URLSchema;
 }
-  ? BaseMatchState & NormalizedParams<StandardSchemaV1.InferOutput<P["_schema"]>>
+  ? BaseMatchState &
+      NormalizedParams<StandardSchemaV1.InferOutput<P["_schema"]>>
   : BaseMatchState & {
       params: Record<string, string | undefined>;
       query: Record<string, string | undefined>;

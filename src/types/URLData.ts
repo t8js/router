@@ -1,7 +1,7 @@
-import { StandardSchemaV1 } from "@standard-schema/spec";
+import type { StandardSchemaV1 } from "@standard-schema/spec";
 import type { LocationShape } from "./LocationShape";
 import type { LocationValue } from "./LocationValue";
-import { URLSchema } from "./URLSchema";
+import type { URLSchema } from "./URLSchema";
 
 export type URLData<T extends LocationValue = LocationValue> = T extends {
   _schema: URLSchema;

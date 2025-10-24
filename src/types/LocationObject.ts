@@ -1,5 +1,5 @@
 import type { LocationShape } from "./LocationShape";
-import { URLSchema } from "./URLSchema";
+import type { URLSchema } from "./URLSchema";
 
 // URL builder output
 export type LocationObject = {
