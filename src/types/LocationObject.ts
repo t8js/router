@@ -1,4 +1,4 @@
-import { URLComponents } from "./URLComponents";
+import type { URLComponents } from "./URLComponents";
 import type { URLSchema } from "./URLSchema";
 
 // URL builder output

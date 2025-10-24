@@ -7,9 +7,9 @@ import type { NavigationCallback } from "./types/NavigationCallback";
 import type { NavigationEvent } from "./types/NavigationEvent";
 import type { NavigationMode } from "./types/NavigationMode";
 import type { URLData } from "./types/URLData";
+import { isLocationObject } from "./utils/isLocationObject";
 import { isSameOrigin } from "./utils/isSameOrigin";
 import { match } from "./utils/match";
-import { isLocationObject } from "./utils/isLocationObject";
 import { toStringMap } from "./utils/toStringMap";
 
 export class Route {
@@ -96,7 +96,9 @@ export class Route {
 
   _getHref(location?: LocationValue) {
     let url = new QuasiURL(
-      String(location ?? (typeof window === "undefined" ? "" : window.location.href))
+      String(
+        location ?? (typeof window === "undefined" ? "" : window.location.href),
+      ),
     );
 
     if (isSameOrigin(url.href)) url.origin = "";
@@ -162,11 +164,17 @@ export class Route {
     if (typeof window === "undefined") return;
 
     if (!window.history || !isSameOrigin(nextHref)) {
-      window.location[navigationMode === "replace" ? "replace" : "assign"](nextHref);
+      window.location[navigationMode === "replace" ? "replace" : "assign"](
+        nextHref,
+      );
       return;
     }
 
-    window.history[navigationMode === "replace" ? "replaceState" : "pushState"]({}, "", nextHref);
+    window.history[navigationMode === "replace" ? "replaceState" : "pushState"](
+      {},
+      "",
+      nextHref,
+    );
   }
 
   /**
@@ -182,9 +190,8 @@ export class Route {
     let url = new QuasiURL(location ?? "");
     let inputQuery = data?.query;
 
-    if (inputQuery)
-      url.search = new URLSearchParams(toStringMap(inputQuery));
-    
+    if (inputQuery) url.search = new URLSearchParams(toStringMap(inputQuery));
+
     return url.href;
   }
 

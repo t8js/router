@@ -1,10 +1,10 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
 import { QuasiURL } from "quasiurl";
+import type { URLComponents } from "url-shape";
 import type { LocationPattern } from "../types/LocationPattern";
+import type { MatchState } from "../types/MatchState";
+import type { URLSchema } from "../types/URLSchema";
 import { isLocationObject } from "./isLocationObject";
-import { URLComponents } from "url-shape";
-import { URLSchema } from "../types/URLSchema";
-import { MatchState } from "../types/MatchState";
 
 function toObject(x: string[]) {
   return x.reduce<Record<string, string>>((p, v, k) => {
@@ -14,11 +14,10 @@ function toObject(x: string[]) {
   }, {});
 }
 
-function matchPattern<P extends LocationPattern>(
-  pattern: P,
-  href: string,
-) {
-  let query = Object.fromEntries(new URLSearchParams(new QuasiURL(href).search));
+function matchPattern<P extends LocationPattern>(pattern: P, href: string) {
+  let query = Object.fromEntries(
+    new URLSearchParams(new QuasiURL(href).search),
+  );
 
   if (typeof pattern === "string")
     return {
@@ -34,18 +33,24 @@ function matchPattern<P extends LocationPattern>(
     return {
       ok: matches !== null,
       href,
-      params: matches ? {
-        ...toObject(Array.from(matches).slice(1)),
-        ...matches.groups,
-      } : {},
+      params: matches
+        ? {
+            ...toObject(Array.from(matches).slice(1)),
+            ...matches.groups,
+          }
+        : {},
       query,
     };
   }
 
   if (isLocationObject(pattern)) {
-    let result = pattern.exec(href) as (P extends {
-      _schema: URLSchema,
-    } ? StandardSchemaV1.InferOutput<P["_schema"]> : URLComponents) | null;
+    let result = pattern.exec(href) as
+      | (P extends {
+          _schema: URLSchema;
+        }
+          ? StandardSchemaV1.InferOutput<P["_schema"]>
+          : URLComponents)
+      | null;
 
     if (result === null)
       return {
@@ -67,7 +72,7 @@ function matchPattern<P extends LocationPattern>(
     ok: false,
     href,
     params: {},
-    query: {}, 
+    query: {},
   };
 }
 
