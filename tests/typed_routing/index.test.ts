@@ -28,12 +28,12 @@ class Playground {
   }
 }
 
-test.describe("routing", () => {
+test.describe("typed routing", () => {
   let server: Server;
 
   test.beforeAll(async () => {
     server = await serve({
-      path: "tests/routing",
+      path: "tests/typed_routing",
       bundle: true,
       spa: true,
     });

@@ -30,7 +30,9 @@
     "@playwright/test": "^1.56.0",
     "@t8/serve": "^0.1.30",
     "@types/node": "^24.5.2",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "url-shape": "^1.2.8",
+    "zod": "^4.1.12"
   },
   "dependencies": {
     "quasiurl": "^1.1.2",
