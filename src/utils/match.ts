@@ -2,9 +2,9 @@ import type { StandardSchemaV1 } from "@standard-schema/spec";
 import { QuasiURL } from "quasiurl";
 import type { LocationPattern } from "../types/LocationPattern";
 import type { MatchState } from "../types/MatchState";
+import type { URLComponents } from "../types/URLComponents";
 import type { URLSchema } from "../types/URLSchema";
 import { isLocationObject } from "./isLocationObject";
-import { URLComponents } from "../types/URLComponents";
 
 function toObject(x: string[]) {
   return x.reduce<Record<string, string>>((p, v, k) => {
