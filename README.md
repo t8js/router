@@ -21,10 +21,10 @@ route.observe(document); // switch links to SPA navigation mode
 
 ```diff
 - window.location.assign("/intro");
-+ route.assign("/intro");
++ route.assign("/intro"); // SPA navigation
 
 - window.location.href = "/intro";
-+ route.href = "/intro";
++ route.href = "/intro"; // SPA navigation
 ```
 
 🔹 Flexible URL pattern matching for URL-based rendering
