@@ -1,5 +1,5 @@
-import type { Config } from "./Config";
-import type { LocationValue } from "./LocationValue";
+import type { Config } from "./Config.ts";
+import type { LocationValue } from "./LocationValue.ts";
 
 export type LocationPattern<C extends Config = Config> =
   C["strict"] extends true

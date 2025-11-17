@@ -1,9 +1,9 @@
-import type { Route } from "./Route";
-import type { ContainerElement } from "./types/ContainerElement";
-import { getNavigationMode } from "./utils/getNavigationMode";
-import { isArrayLike } from "./utils/isArrayLike";
-import { isLinkElement } from "./utils/isLinkElement";
-import { isRouteEvent } from "./utils/isRouteEvent";
+import type { Route } from "./Route.ts";
+import type { ContainerElement } from "./types/ContainerElement.ts";
+import { getNavigationMode } from "./utils/getNavigationMode.ts";
+import { isArrayLike } from "./utils/isArrayLike.ts";
+import { isLinkElement } from "./utils/isLinkElement.ts";
+import { isRouteEvent } from "./utils/isRouteEvent.ts";
 
 export function observe(
   route: Route,

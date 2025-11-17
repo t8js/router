@@ -1,6 +1,6 @@
 import { createURLSchema } from "url-shape";
 import { z } from "zod";
-import { Route } from "../../src/Route";
+import { Route } from "../../src/Route.ts";
 import "./index.css";
 
 let { url } = createURLSchema({

@@ -1,5 +1,5 @@
-import type { URLComponents } from "./URLComponents";
-import type { URLSchema } from "./URLSchema";
+import type { URLComponents } from "./URLComponents.ts";
+import type { URLSchema } from "./URLSchema.ts";
 
 // URL builder output
 export type LocationObject = {

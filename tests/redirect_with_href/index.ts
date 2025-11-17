@@ -1,4 +1,4 @@
-import { Route } from "../../src/Route";
+import { Route } from "../../src/Route.ts";
 import "./index.css";
 
 let route = new Route();

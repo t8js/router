@@ -1,4 +1,4 @@
-import type { LocationObject } from "../types/LocationObject";
+import type { LocationObject } from "../types/LocationObject.ts";
 
 export function isLocationObject(x: unknown): x is LocationObject {
   return (

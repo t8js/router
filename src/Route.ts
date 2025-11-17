@@ -1,16 +1,16 @@
 import { QuasiURL } from "quasiurl";
-import { observe } from "./observe";
-import type { LocationPattern } from "./types/LocationPattern";
-import type { LocationValue } from "./types/LocationValue";
-import type { MatchHandler } from "./types/MatchHandler";
-import type { NavigationCallback } from "./types/NavigationCallback";
-import type { NavigationEvent } from "./types/NavigationEvent";
-import type { NavigationMode } from "./types/NavigationMode";
-import type { URLData } from "./types/URLData";
-import { isLocationObject } from "./utils/isLocationObject";
-import { isSameOrigin } from "./utils/isSameOrigin";
-import { match } from "./utils/match";
-import { toStringMap } from "./utils/toStringMap";
+import { observe } from "./observe.ts";
+import type { LocationPattern } from "./types/LocationPattern.ts";
+import type { LocationValue } from "./types/LocationValue.ts";
+import type { MatchHandler } from "./types/MatchHandler.ts";
+import type { NavigationCallback } from "./types/NavigationCallback.ts";
+import type { NavigationEvent } from "./types/NavigationEvent.ts";
+import type { NavigationMode } from "./types/NavigationMode.ts";
+import type { URLData } from "./types/URLData.ts";
+import { isLocationObject } from "./utils/isLocationObject.ts";
+import { isSameOrigin } from "./utils/isSameOrigin.ts";
+import { match } from "./utils/match.ts";
+import { toStringMap } from "./utils/toStringMap.ts";
 
 export class Route {
   _href = "";

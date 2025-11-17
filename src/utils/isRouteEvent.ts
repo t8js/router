@@ -1,5 +1,5 @@
-import type { LocationValue } from "../types/LocationValue";
-import { isSameOrigin } from "./isSameOrigin";
+import type { LocationValue } from "../types/LocationValue.ts";
+import { isSameOrigin } from "./isSameOrigin.ts";
 
 export type LinkProps = {
   href?: LocationValue;

@@ -1,5 +1,5 @@
-import type { Config } from "./Config";
-import type { LocationObject } from "./LocationObject";
+import type { Config } from "./Config.ts";
+import type { LocationObject } from "./LocationObject.ts";
 
 export type LocationValue<C extends Config = Config> = C["strict"] extends true
   ? LocationObject | undefined

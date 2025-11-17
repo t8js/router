@@ -1,6 +1,6 @@
 import type { StandardSchemaV1 } from "@standard-schema/spec";
-import type { LocationPattern } from "../types/LocationPattern";
-import type { URLSchema } from "../types/URLSchema";
+import type { LocationPattern } from "../types/LocationPattern.ts";
+import type { URLSchema } from "../types/URLSchema.ts";
 
 export type MatchState<P extends LocationPattern> = {
   ok: boolean;

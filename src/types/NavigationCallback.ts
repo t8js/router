@@ -1,4 +1,4 @@
-import type { NavigationMode } from "./NavigationMode";
+import type { NavigationMode } from "./NavigationMode.ts";
 
 type Callback<R> = (
   nextHref: string,
