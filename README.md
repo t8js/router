@@ -1,8 +1,8 @@
-[![npm](https://flat.badgen.net/npm/v/@t8/router?labelColor=345&color=46e)](https://www.npmjs.com/package/@t8/router) ![Lightweight](https://flat.badgen.net/bundlephobia/minzip/@t8/router/?label=minzip&labelColor=345&color=46e&r=0) ![TypeScript ✓](https://flat.badgen.net/badge/TypeScript/✓?labelColor=345&color=345)
+# T8 Router
 
-# @t8/router
+*Vanilla JS/TS router for SPA navigation*
 
-*Vanilla JS/TS router*
+[![npm](https://img.shields.io/npm/v/@t8/router?labelColor=345&color=46e)](https://www.npmjs.com/package/@t8/router) ![Lightweight](https://img.shields.io/bundlephobia/minzip/@t8/router?label=minzip&labelColor=345&color=46e)
 
 <!-- docsgen-hide-start -->
 - Concise API for SPA navigation
