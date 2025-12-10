@@ -261,7 +261,7 @@ export class Route {
     this._navigate();
   }
 
-  /*
+  /**
    * Jumps the specified number of the browser history entries away
    * from the current entry.
    */
