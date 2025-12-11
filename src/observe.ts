@@ -8,11 +8,6 @@ import { isRouteEvent } from "./utils/isRouteEvent.ts";
 export function observe(
   route: Route,
   container: ContainerElement | (() => ContainerElement),
-  /**
-   * A selector, or an HTML element, or a collection thereof.
-   *
-   * @defaultValue 'a, area'
-   */
   elements:
     | string
     | Node

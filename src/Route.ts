@@ -43,14 +43,18 @@ export class Route {
     this._navigated = false;
     this._navigationQueue = [];
   }
-
+  
+  /**
+   * Converts plain HTML links to SPA route links.
+   *
+   * @param container - A container element or a function returning a
+   * container element.
+   * @param elements - An optional selector, or an HTML element, or a
+   * collection thereof, specifying the links inside the container to
+   * be converted to SPA route links. Default: `"a, area"`.
+   */
   observe(
     container: Parameters<typeof observe>[1],
-    /**
-     * A selector, or an HTML element, or a collection thereof.
-     *
-     * @defaultValue "a, area"
-     */
     elements?: Parameters<typeof observe>[2],
   ) {
     return observe(this, container, elements);
@@ -250,7 +254,7 @@ export class Route {
   }
 
   /**
-   * Replaces the current history entry
+   * Replaces the current browser's history entry
    * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
   replace(location: LocationValue) {
