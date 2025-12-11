@@ -43,7 +43,7 @@ export class Route {
     this._navigated = false;
     this._navigationQueue = [];
   }
-  
+
   /**
    * Converts plain HTML links to SPA route links.
    *
