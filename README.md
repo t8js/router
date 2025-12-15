@@ -1,6 +1,6 @@
 # T8 Router
 
-*Vanilla JS/TS router for SPA navigation*
+Vanilla JS/TS router for SPA navigation and URL pattern matching
 
 [![npm](https://img.shields.io/npm/v/@t8/router?labelColor=345&color=46e)](https://www.npmjs.com/package/@t8/router) ![Lightweight](https://img.shields.io/bundlephobia/minzip/@t8/router?label=minzip&labelColor=345&color=46e)
 
@@ -11,7 +11,7 @@
 <!-- docsgen-hide-end -->
 
 <!-- docsgen-show-start --
-🔹 Concise API for SPA navigation
+⬥ Concise API for SPA navigation
 
 ```js
 let route = new Route();
@@ -27,7 +27,7 @@ route.observe(document); // switch links to SPA navigation mode
 + route.href = "/intro"; // SPA navigation
 ```
 
-🔹 Flexible URL pattern matching for URL-based rendering
+⬥ Flexible URL pattern matching for URL-based rendering
 
 ```js
 header.className = route.href === "/" ? "full" : "compact";
@@ -46,7 +46,7 @@ let sectionTitle = route.at(
 // at "/sections/<id>" ? "Section <id>" : undefined
 ```
 
-🔹 Navigation middleware
+⬥ Navigation middleware
 
 ```js
 route.on("navigationstart", callback);
@@ -63,13 +63,15 @@ Installation: `npm i @t8/router`
 
 ## Initialization
 
+A `Route` instance exposes methods for URL navigation without full-page reloads resembling the similar methods exposed by `window.location` for regular URL navigation.
+
 ```js
 import { Route } from "@t8/router";
 
 let route = new Route();
 ```
 
-🔹 The `new Route(location)` constructor accepts an optional URL location. In the browser, the current URL is implied if `location` is omitted.
+⬥ The `new Route(url)` constructor accepts an optional URL. In the browser, the current URL is implied if `url` is omitted.
 
 ## Navigation
 
@@ -87,12 +89,14 @@ let route = new Route();
 + console.log(route.href);
 ```
 
-🔹 The route navigation API is largely in line with the built-in navigation APIs. An instance of `Route` exposes: `.assign(url)`, `.replace(url)`, `.reload()`, `.href`, `.pathname`, `.search`, `.hash`, `.back()`, `.forward()`, `.go(delta)` — similar to the built-in APIs of `window.location` and `history` carried over to route-based SPA navigation.
+⬥ The route navigation API is largely in line with the built-in navigation APIs. An instance of `Route` exposes: `.assign(url)`, `.replace(url)`, `.reload()`, `.href`, `.pathname`, `.search`, `.hash`, `.back()`, `.forward()`, `.go(delta)` — similar to the built-in APIs of `window.location` and `history` carried over to route-based SPA navigation.
 
 ## Events & Middleware
 
+Subscription to the `Route`'s navigation events allows to hook into the course of the route navigation.
+
 ```js
-route.on("navigationstart", href => {
+route.on("navigationstart", (href) => {
   if (hasUnsavedChanges)
     return false; // prevents navigation
 
@@ -104,13 +108,13 @@ route.on("navigationstart", href => {
 ```
 
 ```js
-route.on("navigationcomplete", href => {
+route.on("navigationcomplete", (href) => {
   if (href === "/intro")
     document.title = "Intro";
 });
 ```
 
-🔹 Both event handlers, acting like routing middleware, are immediately called when they are added if the route is already in the navigation-complete state.
+⬥ Both event handlers, acting like routing middleware, are immediately called when they are added if the route is already in the navigation-complete state.
 
 ## Route matching
 
@@ -137,7 +141,7 @@ let sectionTitle = route.at(
 // at "/sections/<id>" ? "Section <id>" : undefined
 ```
 
-🔹 Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by [*url-shape*](https://github.com/t8js/url-shape#readme), to `route.match(pattern)` or `route.at(pattern, x, y)`.
+⬥ Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by [*url-shape*](https://github.com/t8js/url-shape#readme), to `route.match(pattern)` or `route.at(pattern, x, y)`.
 
 ## Converting HTML links to SPA route links
 
@@ -147,7 +151,7 @@ route.observe(document);
 
 The above line turns all `<a>` and `<area>` elements in the `document` to SPA route links enabling navigation without page reloads via the `route` object.
 
-🔹 `route.observe(container, elements)` accepts a container element (it can be `document`, as in the example above) and optionally `elements` (which can be a selector or HTML elements) specifying the SPA navigation links.
+⬥ `route.observe(container, elements)` accepts a container element (it can be `document`, as in the example above) and optionally `elements` (which can be a selector or HTML elements) specifying the SPA navigation links.
 
 ```js
 route.observe(document.querySelector("#app"), "nav a");
@@ -155,5 +159,5 @@ route.observe(document.querySelector("#app"), "nav a");
 
 ---
 
-[Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts)<br>
-[T8 React Router](https://github.com/t8js/react-router)
+- [Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts)
+- [T8 React Router](https://github.com/t8js/react-router)
