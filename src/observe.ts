@@ -5,6 +5,9 @@ import { isArrayLike } from "./utils/isArrayLike.ts";
 import { isLinkElement } from "./utils/isLinkElement.ts";
 import { isRouteEvent } from "./utils/isRouteEvent.ts";
 
+/**
+ * @see `Route.observe()`
+ */
 export function observe(
   route: Route,
   container: ContainerElement | (() => ContainerElement),

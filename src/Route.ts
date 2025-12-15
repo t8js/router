@@ -25,18 +25,31 @@ export class Route {
   connected = false;
   navigating = false;
 
-  constructor(location?: LocationValue) {
-    this.connect(location);
+  constructor(url?: LocationValue) {
+    this.connect(url);
   }
 
-  connect(location?: LocationValue) {
+  /**
+   * Signals the route instance to start listening to browser history
+   * navigation events and notify the subscribers.
+   * 
+   * A route instance is automatically connected once it's created. By
+   * calling `connect()`, it can be reconnected after it was disconnected.
+   */
+  connect(url?: LocationValue) {
     this.connected = true;
-    this._href = this._getHref(location);
-    this._init(location);
+    this._href = this._getHref(url);
+    this._init(url);
 
     return this;
   }
 
+  /**
+   * Signals the route instance to stop listening to browser history
+   * navigation events and notifying the subscribers.
+   * 
+   * It can reconnected by calling the `connect()` method.
+   */
   disconnect() {
     this.connected = false;
     this._cleanup?.();
@@ -45,7 +58,8 @@ export class Route {
   }
 
   /**
-   * Converts plain HTML links to SPA route links.
+   * Converts plain HTML links to SPA route links by channeling their
+   * clicks to browser history navigation preventing full-page reloads.
    *
    * @param container - A container element or a function returning a
    * container element.
@@ -60,6 +74,9 @@ export class Route {
     return observe(this, container, elements);
   }
 
+  /**
+   * Adds a route event listener.
+   */
   on(event: NavigationEvent, callback: NavigationCallback) {
     if (!(event in this._handlers))
       throw new Error(`Unknown event type: '${event}'`);
@@ -73,14 +90,14 @@ export class Route {
     };
   }
 
-  _init(location?: LocationValue) {
+  _init(url?: LocationValue) {
     if (typeof window === "undefined") return;
 
     this._cleanup = this._subscribe();
 
     // Allow setting up event handlers before the first navigation.
     Promise.resolve()
-      .then(() => this._navigate(location))
+      .then(() => this._navigate(url))
       .then(() => {
         this._navigated = true;
       });
@@ -98,33 +115,33 @@ export class Route {
     };
   }
 
-  _getHref(location?: LocationValue) {
-    let url = new QuasiURL(
+  _getHref(url?: LocationValue) {
+    let urlObject = new QuasiURL(
       String(
-        location ?? (typeof window === "undefined" ? "" : window.location.href),
+        url ?? (typeof window === "undefined" ? "" : window.location.href),
       ),
     );
 
-    if (isSameOrigin(url.href)) url.origin = "";
+    if (isSameOrigin(urlObject.href)) urlObject.origin = "";
 
-    return url.href;
+    return urlObject.href;
   }
 
   async _navigate<T extends LocationValue>(
-    location?: T,
+    url?: T,
     navigationMode?: NavigationMode,
   ): Promise<void> {
     if (!this.connected) return;
 
     if (this.navigating) {
-      this._navigationQueue.push([location, navigationMode]);
+      this._navigationQueue.push([url, navigationMode]);
       return;
     }
 
     this.navigating = true;
 
     let prevHref = this._href;
-    let nextHref = this._getHref(location);
+    let nextHref = this._getHref(url);
 
     for (let callback of this._handlers.navigationstart) {
       let result = callback(nextHref, prevHref, navigationMode);
@@ -182,16 +199,20 @@ export class Route {
   }
 
   /**
-   * Matches the current location against the location pattern.
+   * Matches the current location against `urlPattern`.
    */
-  match<P extends LocationPattern>(locationPattern: P) {
-    return match<P>(locationPattern, this._href);
+  match<P extends LocationPattern>(urlPattern: P) {
+    return match<P>(urlPattern, this._href);
   }
 
-  compile<T extends LocationValue>(location: T, data?: URLData<T>) {
-    if (isLocationObject(location)) return location.compile(data);
+  /**
+   * Compiles `urlPattern` to a URL string by filling out the parameters
+   * based on `data`.
+   */
+  compile<T extends LocationValue>(urlPattern: T, data?: URLData<T>) {
+    if (isLocationObject(urlPattern)) return urlPattern.compile(data);
 
-    let url = new QuasiURL(location ?? "");
+    let url = new QuasiURL(urlPattern ?? "");
     let inputQuery = data?.query;
 
     if (inputQuery) url.search = new URLSearchParams(toStringMap(inputQuery));
@@ -200,40 +221,40 @@ export class Route {
   }
 
   /**
-   * Loosely resembles the conditional ternary operator
-   * `matchesLocationPattern ? x : y`: if the current location matches
-   * `locationPattern` the returned value is based on the second parameter,
-   * otherwise on the third parameter.
+   * Checks whether `urlPattern` matches the current URL and returns either
+   * based on `x` if there is a match, or based on `y` otherwise. (It
+   * loosely resembles the ternary conditional operator
+   * `matchesPattern ? x : y`.)
    *
-   * If the current location matches `locationPattern`,
-   * `.at(locationPattern, x, y)` returns:
+   * If the current location matches `urlPattern`, `at(urlPattern, x, y)`
+   * returns:
    * - `x`, if `x` is not a function;
    * - `x({ params })`, if `x` is a function, with `params` extracted from
-   * the current location.
+   * the current URL.
    *
-   * If the current location doesn't match `locationPattern`,
-   * `.at(locationPattern, x, y)` returns:
+   * If the current location doesn't match `urlPattern`, `at(urlPattern, x, y)`
+   * returns:
    * - `y`, if `y` is not a function;
    * - `y({ params })`, if `y` is a function, with `params` extracted from
-   * the current location.
+   * the current URL.
    */
   at<P extends LocationPattern, X>(
-    locationPattern: P,
+    urlPattern: P,
     matchOutput: X | MatchHandler<P, X>,
   ): X | undefined;
 
   at<P extends LocationPattern, X, Y>(
-    locationPattern: P,
+    urlPattern: P,
     matchOutput: X | MatchHandler<P, X>,
     mismatchOutput: Y | MatchHandler<P, Y>,
   ): X | Y;
 
   at<P extends LocationPattern, X, Y>(
-    locationPattern: P,
+    urlPattern: P,
     matchOutput: X | MatchHandler<P, X>,
     mismatchOutput?: Y | MatchHandler<P, Y>,
   ): X | Y | undefined {
-    let matchState = match<P>(locationPattern, this._href);
+    let matchState = match<P>(urlPattern, this._href);
 
     if (!matchState.ok)
       return typeof mismatchOutput === "function"
@@ -246,21 +267,24 @@ export class Route {
   }
 
   /**
-   * Adds an entry to the browser's session history
-   * (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
+   * Navigates to `url` by adding an entry to the browser's session
+   * history (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
-  assign(location: LocationValue) {
-    this._navigate(location);
+  assign(url: LocationValue) {
+    this._navigate(url);
   }
 
   /**
-   * Replaces the current browser's history entry
-   * (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
+   * Navigates to `url` by replacing the current browser's history
+   * entry (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
-  replace(location: LocationValue) {
-    this._navigate(location, "replace");
+  replace(url: LocationValue) {
+    this._navigate(url, "replace");
   }
-
+  
+  /**
+   * Navigates to the current URL and renotifies the subscribers.
+   */
   reload() {
     this._navigate();
   }
@@ -274,10 +298,16 @@ export class Route {
       window.history.go(delta);
   }
 
+  /**
+   * Navigates to the previous browser history entry.
+   */
   back() {
     this.go(-1);
   }
 
+  /**
+   * Navigates to the next browser history entry, if it's available.
+   */
   forward() {
     this.go(1);
   }
@@ -286,8 +316,8 @@ export class Route {
     return this._href;
   }
 
-  set href(location: LocationValue) {
-    this._navigate(location);
+  set href(url: LocationValue) {
+    this._navigate(url);
   }
 
   get pathname(): string {
