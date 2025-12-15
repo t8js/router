@@ -8,6 +8,7 @@ export function isSameOrigin(url: LocationValue): boolean {
 
   return (
     urlObject.origin === "" ||
-    (typeof window !== "undefined" && urlObject.origin === window.location.origin)
+    (typeof window !== "undefined" &&
+      urlObject.origin === window.location.origin)
   );
 }

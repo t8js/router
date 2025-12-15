@@ -32,7 +32,7 @@ export class Route {
   /**
    * Signals the route instance to start listening to browser history
    * navigation events and notify the subscribers.
-   * 
+   *
    * A route instance is automatically connected once it's created. By
    * calling `connect()`, it can be reconnected after it was disconnected.
    */
@@ -47,7 +47,7 @@ export class Route {
   /**
    * Signals the route instance to stop listening to browser history
    * navigation events and notifying the subscribers.
-   * 
+   *
    * It can reconnected by calling the `connect()` method.
    */
   disconnect() {
@@ -281,7 +281,7 @@ export class Route {
   replace(url: LocationValue) {
     this._navigate(url, "replace");
   }
-  
+
   /**
    * Navigates to the current URL and renotifies the subscribers.
    */
