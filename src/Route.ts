@@ -24,6 +24,10 @@ export class Route {
   _navigated = false;
   connected = false;
   navigating = false;
+  /**
+   * Revision changes on each navigation (unlike `href`).
+   */
+  revision = -1;
 
   constructor(url?: LocationValue) {
     this.connect(url);
@@ -158,6 +162,7 @@ export class Route {
     }
 
     this._href = nextHref;
+    this.revision = Math.random();
 
     for (let callback of this._handlers.navigationcomplete) {
       let result = callback(nextHref, prevHref, navigationMode);
