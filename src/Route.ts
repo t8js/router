@@ -81,13 +81,13 @@ export class Route {
   /**
    * Adds a route event listener.
    */
-  on(event: NavigationEvent, callback: NavigationCallback) {
+  on(event: NavigationEvent, callback: NavigationCallback, skipInitialCall = false) {
     if (!(event in this._handlers))
       throw new Error(`Unknown event type: '${event}'`);
 
     this._handlers[event].add(callback);
 
-    if (this.connected && this._navigated) callback(this.href, this.href);
+    if (this.connected && this._navigated && !skipInitialCall) callback(this.href, this.href);
 
     return () => {
       this._handlers[event].delete(callback);
