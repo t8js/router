@@ -1,5 +1,5 @@
 import type { NavigationMode } from "./NavigationMode.ts";
-import { ScrollMode } from "./ScrollMode.ts";
+import type { ScrollMode } from "./ScrollMode.ts";
 
 export type LinkNavigationProps = {
   "data-navigation-mode"?: NavigationMode | undefined;

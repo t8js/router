@@ -56,8 +56,7 @@ export function observe(
 
     event.preventDefault();
 
-    if (getScrollMode(activeElement) !== "off")
-      window.scrollTo(0, 0);
+    if (getScrollMode(activeElement) !== "off") window.scrollTo(0, 0);
 
     route._navigate(activeElement.href, getNavigationMode(activeElement));
   };

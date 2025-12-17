@@ -62,7 +62,10 @@ test.describe("link scroll mode", () => {
     await p.hasMainTitle("Intro");
     await p.isScrolledUp();
 
-    let link = page.getByRole("link", { name: "To the story (no scroll)", exact: true });
+    let link = page.getByRole("link", {
+      name: "To the story (no scroll)",
+      exact: true,
+    });
 
     await link.scrollIntoViewIfNeeded();
     await p.isScrolledAway();
