@@ -1,4 +1,4 @@
-import { LocationValue } from "./LocationValue.ts";
+import type { LocationValue } from "./LocationValue.ts";
 
 export type LinkProps = {
   href?: LocationValue;

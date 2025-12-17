@@ -1,4 +1,4 @@
-import { LinkProps } from "../types/LinkProps.ts";
+import type { LinkProps } from "../types/LinkProps.ts";
 import { isSameOrigin } from "./isSameOrigin.ts";
 
 export function isRouteEvent(
