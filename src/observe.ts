@@ -5,6 +5,7 @@ import { getScrollMode } from "./utils/getScrollMode.ts";
 import { isArrayLike } from "./utils/isArrayLike.ts";
 import { isLinkElement } from "./utils/isLinkElement.ts";
 import { isRouteEvent } from "./utils/isRouteEvent.ts";
+import { scroll } from "./utils/scroll.ts";
 
 /**
  * @see `Route.observe()`
@@ -56,9 +57,9 @@ export function observe(
 
     event.preventDefault();
 
-    if (getScrollMode(activeElement) !== "off") window.scrollTo(0, 0);
-
-    route._navigate(activeElement.href, getNavigationMode(activeElement));
+    route._navigate(activeElement.href, getNavigationMode(activeElement)).then(() => {
+      if (getScrollMode(activeElement) !== "off") scroll(activeElement);
+    });
   };
 
   document.addEventListener("click", handleClick);

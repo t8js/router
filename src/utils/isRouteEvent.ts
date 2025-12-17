@@ -1,10 +1,5 @@
-import type { LocationValue } from "../types/LocationValue.ts";
+import { LinkProps } from "../types/LinkProps.ts";
 import { isSameOrigin } from "./isSameOrigin.ts";
-
-export type LinkProps = {
-  href?: LocationValue;
-  target?: string | null | undefined;
-};
 
 export function isRouteEvent(
   event: unknown,
