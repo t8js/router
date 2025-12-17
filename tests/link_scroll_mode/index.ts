@@ -12,11 +12,11 @@ route.observe(document);
 function render() {
   document
     .querySelector('main[data-id="intro"]')!
-    .toggleAttribute("hidden", route.href !== "/");
+    .toggleAttribute("hidden", route.pathname !== "/");
 
   document
     .querySelector('main[data-id="story"]')!
-    .toggleAttribute("hidden", route.href !== "/story");
+    .toggleAttribute("hidden", route.pathname !== "/story");
 
   document.body.removeAttribute("hidden");
 }
