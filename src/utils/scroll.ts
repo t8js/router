@@ -8,7 +8,10 @@ export function scroll({
   if (typeof window === "undefined" || (target && target !== "_self")) return;
 
   let { hash } = new QuasiURL(String(href));
-  let targetElement = hash === "" ? null : document.querySelector(`${hash}, a[name="${hash.slice(1)}"]`);
+  let targetElement =
+    hash === ""
+      ? null
+      : document.querySelector(`${hash}, a[name="${hash.slice(1)}"]`);
 
   if (targetElement) targetElement.scrollIntoView();
   else window.scrollTo(0, 0);
