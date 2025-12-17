@@ -1,6 +1,7 @@
 import type { Route } from "./Route.ts";
 import type { ContainerElement } from "./types/ContainerElement.ts";
 import { getNavigationMode } from "./utils/getNavigationMode.ts";
+import { getScrollMode } from "./utils/getScrollMode.ts";
 import { isArrayLike } from "./utils/isArrayLike.ts";
 import { isLinkElement } from "./utils/isLinkElement.ts";
 import { isRouteEvent } from "./utils/isRouteEvent.ts";
@@ -54,6 +55,10 @@ export function observe(
     if (!activeElement) return;
 
     event.preventDefault();
+
+    if (getScrollMode(activeElement) !== "off")
+      window.scrollTo(0, 0);
+
     route._navigate(activeElement.href, getNavigationMode(activeElement));
   };
 
