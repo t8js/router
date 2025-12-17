@@ -57,8 +57,14 @@ export function observe(
 
     event.preventDefault();
 
-    route._navigate(activeElement.href, getNavigationMode(activeElement)).then(() => {
-      if (getScrollMode(activeElement) !== "off") scroll(activeElement);
+    let { href, target } = activeElement;
+    let linkProps = { href, target };
+
+    let navigationMode = getNavigationMode(activeElement);
+    let scrollMode = getScrollMode(activeElement);
+
+    route._navigate(href, navigationMode).then(() => {
+      if (scrollMode !== "off") scroll(linkProps);
     });
   };
 
