@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>@t8/router demo - link click scroll</title>
+    <link rel="stylesheet" href="/dist/index.css">
+  </head>
+  <body hidden>
+    <main data-id="intro" hidden>
+      <h1>Intro</h1>
+      <p class="placeholder">Long text placeholder</p>
+      <p>
+        <a href="/story">To the story</a> |
+        <a href="/story" data-scroll="off">To the story (no scroll)</a>
+      </p>
+    </main>
+    <main data-id="story" hidden>
+      <h1>Story</h1>
+      <p class="placeholder">Long text placeholder</p>
+      <p><a href="/">Back to the intro</a></p>
+    </main>
+    <script src="/dist/index.js"></script>
+  </body>
+</html>
