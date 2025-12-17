@@ -93,6 +93,8 @@ let route = new Route();
 
 ⬥ A link can be switched to the replace mode by having the `data-navigation-mode="replace"` attribute. In the replace mode, clicking the link will replace the current history navigation entry rather than keep it as a previous record (similarly to calling `route.replace(url)`), effectively preventing the user from returning to the current URL by pressing the browser's *Back* button.
 
+⬥ The `data-scroll="off"` attribute can be added to a link to prevent the page from scrolling up to the top when the link is clicked, which is the default behavior (like with regular HTML links).
+
 ## Events & Middleware
 
 Subscription to the `Route`'s navigation events allows to hook into the course of the route navigation.
