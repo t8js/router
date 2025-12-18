@@ -1,9 +1,4 @@
-import type { NavigationMode } from "./NavigationMode.ts";
+import { NavigationOptions } from "./NavigationOptions.ts";
 
-type Callback<R> = (
-  nextHref: string,
-  prevHref: string,
-  navigationMode?: NavigationMode,
-) => R | Promise<R>;
-
-export type NavigationCallback = Callback<boolean | undefined> | Callback<void>;
+export type NavigationCallback = (options: NavigationOptions) =>
+  boolean | undefined | Promise<boolean | undefined> | void | Promise<void>;

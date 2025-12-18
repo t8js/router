@@ -1,11 +1,9 @@
 import type { Route } from "./Route.ts";
 import type { ContainerElement } from "./types/ContainerElement.ts";
-import { getNavigationMode } from "./utils/getNavigationMode.ts";
-import { getScrollMode } from "./utils/getScrollMode.ts";
+import { getNavigationOptions } from "./utils/getNavigationOptions.ts";
 import { isArrayLike } from "./utils/isArrayLike.ts";
 import { isLinkElement } from "./utils/isLinkElement.ts";
 import { isRouteEvent } from "./utils/isRouteEvent.ts";
-import { scroll } from "./utils/scroll.ts";
 
 /**
  * @see `Route.observe()`
@@ -24,48 +22,35 @@ export function observe(
     let resolvedContainer =
       typeof container === "function" ? container() : container;
 
-    if (!route.connected || !resolvedContainer) return;
+    if (!isRouteEvent(event) || !route.active || !resolvedContainer) return;
 
     if (event.defaultPrevented) return;
 
-    let activeElement: HTMLAnchorElement | HTMLAreaElement | null = null;
-    let connectedElements = isArrayLike(elements)
+    let element: HTMLAnchorElement | HTMLAreaElement | null = null;
+    let targetElements = isArrayLike(elements)
       ? Array.from(elements)
       : [elements];
 
-    for (let connectedElement of connectedElements) {
-      let element: Node | null = null;
+    for (let targetElement of targetElements) {
+      let target: Node | null = null;
 
-      if (typeof connectedElement === "string")
-        element =
+      if (typeof targetElement === "string")
+        target =
           event.target instanceof HTMLElement
-            ? event.target.closest(connectedElement)
+            ? event.target.closest(targetElement)
             : null;
-      else element = connectedElement;
+      else target = targetElement;
 
-      if (
-        isLinkElement(element) &&
-        resolvedContainer.contains(element) &&
-        isRouteEvent(event, element)
-      ) {
-        activeElement = element;
+      if (isLinkElement(target) && resolvedContainer.contains(target)) {
+        element = target;
         break;
       }
     }
 
-    if (!activeElement) return;
-
-    event.preventDefault();
-
-    let { href, target } = activeElement;
-    let linkProps = { href, target };
-
-    let navigationMode = getNavigationMode(activeElement);
-    let scrollMode = getScrollMode(activeElement);
-
-    route._navigate(href, navigationMode).then(() => {
-      if (scrollMode !== "off") scroll(linkProps);
-    });
+    if (element) {
+      event.preventDefault();
+      route._navigate(getNavigationOptions(element));
+    }
   };
 
   document.addEventListener("click", handleClick);

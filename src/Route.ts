@@ -5,43 +5,39 @@ import type { LocationValue } from "./types/LocationValue.ts";
 import type { MatchHandler } from "./types/MatchHandler.ts";
 import type { NavigationCallback } from "./types/NavigationCallback.ts";
 import type { NavigationEvent } from "./types/NavigationEvent.ts";
-import type { NavigationMode } from "./types/NavigationMode.ts";
-import type { URLData } from "./types/URLData.ts";
-import { isLocationObject } from "./utils/isLocationObject.ts";
 import { isSameOrigin } from "./utils/isSameOrigin.ts";
 import { match } from "./utils/match.ts";
+import { NavigationOptions } from "./types/NavigationOptions.ts";
+import { URLData } from "./types/URLData.ts";
+import { isLocationObject } from "./utils/isLocationObject.ts";
 import { toStringMap } from "./utils/toStringMap.ts";
 
 export class Route {
   _href = "";
   _cleanup: (() => void) | null = null;
-  _handlers: Record<NavigationEvent, Set<NavigationCallback>> = {
+  _callbacks: Record<NavigationEvent, Set<NavigationCallback>> = {
     navigationstart: new Set(),
     navigationcomplete: new Set(),
   };
-  _navigationQueue: [LocationValue | undefined, NavigationMode | undefined][] =
-    [];
-  _navigated = false;
-  connected = false;
-  navigating = false;
-  /**
-   * Revision changes on each navigation (unlike `href`).
-   */
-  revision = -1;
+  _queue: (NavigationOptions | undefined)[] = [];
+  _inited = false;
 
-  constructor(url?: LocationValue) {
-    this.connect(url);
+  active = false;
+  navigating = false;
+
+  constructor(url?: string | undefined) {
+    this.start(url);
   }
 
   /**
    * Signals the route instance to start listening to browser history
    * navigation events and notify the subscribers.
    *
-   * A route instance is automatically connected once it's created. By
-   * calling `connect()`, it can be reconnected after it was disconnected.
+   * A route instance is automatically started once it's created. By
+   * calling `start()`, it can be restarted after being stopped.
    */
-  connect(url?: LocationValue) {
-    this.connected = true;
+  start(url?: string | undefined) {
+    this.active = true;
     this._href = this._getHref(url);
     this._init(url);
 
@@ -52,13 +48,13 @@ export class Route {
    * Signals the route instance to stop listening to browser history
    * navigation events and notifying the subscribers.
    *
-   * It can reconnected by calling the `connect()` method.
+   * It can be restarted by calling the `start()` method.
    */
-  disconnect() {
-    this.connected = false;
+  stop() {
+    this.active = false;
     this._cleanup?.();
-    this._navigated = false;
-    this._navigationQueue = [];
+    this._inited = false;
+    this._queue = [];
   }
 
   /**
@@ -79,40 +75,46 @@ export class Route {
   }
 
   /**
-   * Adds a route event listener.
+   * Adds a callback to handle a route event.
    */
   on(
     event: NavigationEvent,
     callback: NavigationCallback,
     skipInitialCall = false,
   ) {
-    if (!(event in this._handlers))
+    if (!(event in this._callbacks))
       throw new Error(`Unknown event type: '${event}'`);
 
-    this._handlers[event].add(callback);
+    this._callbacks[event].add(callback);
 
-    if (this.connected && this._navigated && !skipInitialCall)
-      callback(this.href, this.href);
+    if (this.active && this._inited && !skipInitialCall)
+      callback({ href: this.href, referrer: this.href });
 
     return () => {
-      this._handlers[event].delete(callback);
+      this._callbacks[event].delete(callback);
     };
   }
 
-  _init(url?: LocationValue) {
+  /**
+   * Initializes the route instance when it's created or restarted.
+   */
+  _init(url?: string | undefined) {
     if (typeof window === "undefined") return;
 
-    this._cleanup = this._subscribe();
+    this._cleanup = this._connect();
 
     // Allow setting up event handlers before the first navigation.
     Promise.resolve()
-      .then(() => this._navigate(url))
+      .then(() => this._navigate({ href: url }))
       .then(() => {
-        this._navigated = true;
+        this._inited = true;
       });
   }
 
-  _subscribe(): () => void {
+  /**
+   * Adds a listener to an external source of navigation events.
+   */
+  _connect(): () => void {
     let navigationHandler = () => {
       this._navigate();
     };
@@ -124,11 +126,12 @@ export class Route {
     };
   }
 
-  _getHref(url?: LocationValue) {
+  /**
+   * Defines how the `href` property is calculated.
+   */
+  _getHref(url?: string | undefined) {
     let urlObject = new QuasiURL(
-      String(
-        url ?? (typeof window === "undefined" ? "" : window.location.href),
-      ),
+      url ?? (typeof window === "undefined" ? "" : window.location.href),
     );
 
     if (isSameOrigin(urlObject.href)) urlObject.origin = "";
@@ -136,76 +139,111 @@ export class Route {
     return urlObject.href;
   }
 
-  async _navigate<T extends LocationValue>(
-    url?: T,
-    navigationMode?: NavigationMode,
-  ): Promise<void> {
-    if (!this.connected) return;
+  /**
+   * Defines the course of the navigation process.
+   */
+  async _navigate(options?: NavigationOptions): Promise<void> {
+    if (!this.active) return;
 
     if (this.navigating) {
-      this._navigationQueue.push([url, navigationMode]);
+      this._queue.push(options);
       return;
     }
 
     this.navigating = true;
 
     let prevHref = this._href;
-    let nextHref = this._getHref(url);
+    let nextHref = this._getHref(options?.href);
 
-    for (let callback of this._handlers.navigationstart) {
-      let result = callback(nextHref, prevHref, navigationMode);
+    let payload: NavigationOptions = {
+      ...options,
+      href: nextHref,
+      referrer: prevHref,
+    };
+
+    let quit = async () => {
+      this.navigating = false;
+
+      if (this._queue.length !== 0)
+        await this._navigate(this._queue.shift());
+    };
+
+    for (let callback of this._callbacks.navigationstart) {
+      let result = callback(payload);
 
       if ((result instanceof Promise ? await result : result) === false)
-        return this._end();
+        return quit();
     }
 
-    if (this._navigated || this._getHref() !== nextHref) {
-      let result = this._transition(nextHref, prevHref, navigationMode);
+    if (this._inited || this._getHref() !== nextHref) {
+      let result = this._transition(payload);
 
       if ((result instanceof Promise ? await result : result) === false)
-        return this._end();
+        return quit();
     }
 
     this._href = nextHref;
-    this.revision = Math.random();
 
-    for (let callback of this._handlers.navigationcomplete) {
-      let result = callback(nextHref, prevHref, navigationMode);
+    for (let callback of this._callbacks.navigationcomplete) {
+      let result = callback(payload);
 
       if (result instanceof Promise) await result;
     }
 
-    await this._end();
+    let result = this._complete(payload);
+
+    if (result instanceof Promise) await result;
+
+    await quit();
   }
 
-  async _end() {
-    this.navigating = false;
-
-    let pendingNavigation = this._navigationQueue.shift();
-
-    if (pendingNavigation !== undefined)
-      await this._navigate.apply(this, pendingNavigation);
-  }
-
-  _transition(
-    nextHref: string,
-    _prevHref: string,
-    navigationMode = "assign",
-  ): ReturnType<NavigationCallback> {
+  /**
+   * Performs the actual transition to the next `href` value.
+   * Involves navigation via History API or `window.location`.
+   */
+  _transition(payload: NavigationOptions): ReturnType<NavigationCallback> {
     if (typeof window === "undefined") return;
 
-    if (!window.history || !isSameOrigin(nextHref)) {
-      window.location[navigationMode === "replace" ? "replace" : "assign"](
-        nextHref,
+    let target = payload?.target;
+    let href = payload?.href;
+
+    if ((target && target !== "_self") || href === undefined) return;
+
+    if (!window.history || !isSameOrigin(href) || payload?.spa === "off") {
+      window.location[payload?.history === "replace" ? "replace" : "assign"](
+        href,
       );
       return;
     }
 
-    window.history[navigationMode === "replace" ? "replaceState" : "pushState"](
+    window.history[payload?.history === "replace" ? "replaceState" : "pushState"](
       {},
       "",
-      nextHref,
+      href,
     );
+  }
+
+  /**
+   * Performs actions after a navigation and its callbacks.
+   * Scrolls to the element matching the URL fragment if the element
+   * is available or to the top of the page otherwise.
+   */
+  _complete(payload: NavigationOptions): ReturnType<NavigationCallback> {
+    if (typeof window === "undefined" || payload?.scroll === "off") return;
+
+    let target = payload?.target;
+    let href = payload?.href;
+
+    if ((target && target !== "_self") || href === undefined) return;
+
+    let { hash } = new QuasiURL(href);
+    let targetElement =
+      hash === ""
+        ? null
+        : document.querySelector(`${hash}, a[name="${hash.slice(1)}"]`);
+
+    if (targetElement) targetElement.scrollIntoView();
+    else window.scrollTo(0, 0);
   }
 
   /**
@@ -221,12 +259,12 @@ export class Route {
    */
   compile<T extends LocationValue>(urlPattern: T, data?: URLData<T>) {
     if (isLocationObject(urlPattern)) return urlPattern.compile(data);
-
+  
     let url = new QuasiURL(urlPattern ?? "");
     let inputQuery = data?.query;
-
+  
     if (inputQuery) url.search = new URLSearchParams(toStringMap(inputQuery));
-
+  
     return url.href;
   }
 
@@ -280,16 +318,16 @@ export class Route {
    * Navigates to `url` by adding an entry to the browser's session
    * history (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
-  assign(url: LocationValue) {
-    this._navigate(url);
+  assign(url: string) {
+    this._navigate({ href: url });
   }
 
   /**
    * Navigates to `url` by replacing the current browser's history
    * entry (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
-  replace(url: LocationValue) {
-    this._navigate(url, "replace");
+  replace(url: string) {
+    this._navigate({ href: url, history: "replace" });
   }
 
   /**
@@ -326,18 +364,18 @@ export class Route {
     return this._href;
   }
 
-  set href(url: LocationValue) {
-    this._navigate(url);
+  set href(url: string) {
+    this._navigate({ href: url });
   }
 
   get pathname(): string {
     return new QuasiURL(this._href).pathname;
   }
 
-  set pathname(value: LocationValue) {
+  set pathname(value: string) {
     let url = new QuasiURL(this._href);
     url.pathname = value ? String(value) : "";
-    this._navigate(url.href);
+    this._navigate({ href: url.href });
   }
 
   get search(): string {
@@ -347,7 +385,7 @@ export class Route {
   set search(value: string | URLSearchParams) {
     let url = new QuasiURL(this._href);
     url.search = value;
-    this._navigate(url.href);
+    this._navigate({ href: url.href });
   }
 
   get hash() {
@@ -357,7 +395,7 @@ export class Route {
   set hash(value: string) {
     let url = new QuasiURL(this._href);
     url.hash = value;
-    this._navigate(url.href);
+    this._navigate({ href: url.href });
   }
 
   /**

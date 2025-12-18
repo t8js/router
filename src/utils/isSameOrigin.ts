@@ -1,10 +1,9 @@
 import { QuasiURL } from "quasiurl";
-import type { LocationValue } from "../types/LocationValue.ts";
 
-export function isSameOrigin(url: LocationValue): boolean {
+export function isSameOrigin(url: string | undefined): boolean {
   if (url === undefined) return false;
 
-  let urlObject = new QuasiURL(String(url));
+  let urlObject = new QuasiURL(url);
 
   return (
     urlObject.origin === "" ||

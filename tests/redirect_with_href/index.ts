@@ -3,7 +3,7 @@ import "./index.css";
 
 let route = new Route();
 
-route.on("navigationstart", (href) => {
+route.on("navigationstart", ({ href }) => {
   if (href === "/") {
     route.href = "/sections/1"; // redirection
     return false;

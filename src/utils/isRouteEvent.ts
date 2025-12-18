@@ -1,10 +1,4 @@
-import type { LinkProps } from "../types/LinkProps.ts";
-import { isSameOrigin } from "./isSameOrigin.ts";
-
-export function isRouteEvent(
-  event: unknown,
-  { href, target }: LinkProps | HTMLAnchorElement | HTMLAreaElement,
-): boolean {
+export function isRouteEvent(event: unknown) {
   return (
     event !== null &&
     typeof event === "object" &&
@@ -12,8 +6,6 @@ export function isRouteEvent(
     (!("ctrlKey" in event) || !event.ctrlKey) &&
     (!("shiftKey" in event) || !event.shiftKey) &&
     (!("altKey" in event) || !event.altKey) &&
-    (!("metaKey" in event) || !event.metaKey) &&
-    (!target || target === "_self") &&
-    (!href || isSameOrigin(href))
+    (!("metaKey" in event) || !event.metaKey)
   );
 }
