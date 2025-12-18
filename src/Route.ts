@@ -44,8 +44,6 @@ export class Route {
     this.active = true;
     this._href = this._getHref(url);
     this._init(url);
-
-    return this;
   }
 
   /**
