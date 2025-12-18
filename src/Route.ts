@@ -12,8 +12,8 @@ import { isSameOrigin } from "./utils/isSameOrigin.ts";
 import { match } from "./utils/match.ts";
 import { toStringMap } from "./utils/toStringMap.ts";
 
-function toHref(url: LocationValue): string {
-  return url ? String(url) : "";
+function toHref(url: LocationValue): NavigationOptions["href"] {
+  return url && String(url);
 }
 
 export class Route {
