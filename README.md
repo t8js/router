@@ -100,7 +100,7 @@ let route = new Route();
 Subscription to the `Route`'s navigation events allows to hook into the course of the route navigation.
 
 ```js
-route.on("navigationstart", (href) => {
+route.on("navigationstart", ({ href }) => {
   if (hasUnsavedChanges)
     return false; // prevents navigation
 
@@ -112,7 +112,7 @@ route.on("navigationstart", (href) => {
 ```
 
 ```js
-route.on("navigationcomplete", (href) => {
+route.on("navigationcomplete", ({ href }) => {
   if (href === "/intro")
     document.title = "Intro";
 });
