@@ -1,5 +1,5 @@
 import { QuasiURL } from "quasiurl";
-import { LocationValue } from "../types/LocationValue.ts";
+import type { LocationValue } from "../types/LocationValue.ts";
 
 export function isSameOrigin(url: LocationValue | URL | QuasiURL): boolean {
   if (url === undefined) return false;

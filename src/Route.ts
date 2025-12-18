@@ -134,7 +134,9 @@ export class Route {
    * Defines how the `href` property is calculated.
    */
   _getHref(url?: LocationValue): string {
-    let href = String(url ?? (typeof window === "undefined" ? "" : window.location.href));
+    let href = String(
+      url ?? (typeof window === "undefined" ? "" : window.location.href),
+    );
     let urlObject = new QuasiURL(href);
 
     if (isSameOrigin(urlObject)) urlObject.origin = "";
