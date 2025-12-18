@@ -237,13 +237,20 @@ export class Route {
     if ((target && target !== "_self") || href === undefined) return;
 
     let { hash } = new QuasiURL(String(href));
-    let targetElement =
-      hash === ""
-        ? null
-        : document.querySelector(`${hash}, a[name="${hash.slice(1)}"]`);
 
-    if (targetElement) targetElement.scrollIntoView();
-    else window.scrollTo(0, 0);
+    return new Promise<void>((resolve) => {
+      requestAnimationFrame(() => {
+        let targetElement =
+          hash === ""
+            ? null
+            : document.querySelector(`${hash}, a[name="${hash.slice(1)}"]`);
+
+        if (targetElement) targetElement.scrollIntoView();
+        else window.scrollTo(0, 0);
+
+        resolve();
+      });
+    });
   }
 
   /**
