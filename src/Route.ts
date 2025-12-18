@@ -12,6 +12,10 @@ import { isSameOrigin } from "./utils/isSameOrigin.ts";
 import { match } from "./utils/match.ts";
 import { toStringMap } from "./utils/toStringMap.ts";
 
+function toHref(url: LocationValue): string {
+  return url ? String(url) : "";
+}
+
 export class Route {
   _href = "";
   _cleanup: (() => void) | null = null;
@@ -25,7 +29,7 @@ export class Route {
   active = false;
   navigating = false;
 
-  constructor(url?: string | undefined) {
+  constructor(url?: LocationValue) {
     this.start(url);
   }
 
@@ -36,7 +40,7 @@ export class Route {
    * A route instance is automatically started once it's created. By
    * calling `start()`, it can be restarted after being stopped.
    */
-  start(url?: string | undefined) {
+  start(url?: LocationValue) {
     this.active = true;
     this._href = this._getHref(url);
     this._init(url);
@@ -98,14 +102,14 @@ export class Route {
   /**
    * Initializes the route instance when it's created or restarted.
    */
-  _init(url?: string | undefined) {
+  _init(url?: LocationValue) {
     if (typeof window === "undefined") return;
 
     this._cleanup = this._connect();
 
     // Allow setting up event handlers before the first navigation.
     Promise.resolve()
-      .then(() => this._navigate({ href: url }))
+      .then(() => this._navigate({ href: toHref(url) }))
       .then(() => {
         this._inited = true;
       });
@@ -129,12 +133,11 @@ export class Route {
   /**
    * Defines how the `href` property is calculated.
    */
-  _getHref(url?: string | undefined) {
-    let urlObject = new QuasiURL(
-      url ?? (typeof window === "undefined" ? "" : window.location.href),
-    );
+  _getHref(url?: LocationValue): string {
+    let href = String(url ?? (typeof window === "undefined" ? "" : window.location.href));
+    let urlObject = new QuasiURL(href);
 
-    if (isSameOrigin(urlObject.href)) urlObject.origin = "";
+    if (isSameOrigin(urlObject)) urlObject.origin = "";
 
     return urlObject.href;
   }
@@ -210,14 +213,14 @@ export class Route {
 
     if (!window.history || !isSameOrigin(href) || payload?.spa === "off") {
       window.location[payload?.history === "replace" ? "replace" : "assign"](
-        href,
+        String(href),
       );
       return;
     }
 
     window.history[
       payload?.history === "replace" ? "replaceState" : "pushState"
-    ]({}, "", href);
+    ]({}, "", String(href));
   }
 
   /**
@@ -233,7 +236,7 @@ export class Route {
 
     if ((target && target !== "_self") || href === undefined) return;
 
-    let { hash } = new QuasiURL(href);
+    let { hash } = new QuasiURL(String(href));
     let targetElement =
       hash === ""
         ? null
@@ -315,16 +318,16 @@ export class Route {
    * Navigates to `url` by adding an entry to the browser's session
    * history (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
-  assign(url: string) {
-    this._navigate({ href: url });
+  assign(url: LocationValue) {
+    this._navigate({ href: toHref(url) });
   }
 
   /**
    * Navigates to `url` by replacing the current browser's history
    * entry (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
-  replace(url: string) {
-    this._navigate({ href: url, history: "replace" });
+  replace(url: LocationValue) {
+    this._navigate({ href: toHref(url), history: "replace" });
   }
 
   /**
@@ -361,15 +364,15 @@ export class Route {
     return this._href;
   }
 
-  set href(url: string) {
-    this._navigate({ href: url });
+  set href(url: LocationValue) {
+    this._navigate({ href: toHref(url) });
   }
 
   get pathname(): string {
     return new QuasiURL(this._href).pathname;
   }
 
-  set pathname(value: string) {
+  set pathname(value: LocationValue) {
     let url = new QuasiURL(this._href);
     url.pathname = value ? String(value) : "";
     this._navigate({ href: url.href });
