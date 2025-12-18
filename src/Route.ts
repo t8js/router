@@ -5,11 +5,11 @@ import type { LocationValue } from "./types/LocationValue.ts";
 import type { MatchHandler } from "./types/MatchHandler.ts";
 import type { NavigationCallback } from "./types/NavigationCallback.ts";
 import type { NavigationEvent } from "./types/NavigationEvent.ts";
+import type { NavigationOptions } from "./types/NavigationOptions.ts";
+import type { URLData } from "./types/URLData.ts";
+import { isLocationObject } from "./utils/isLocationObject.ts";
 import { isSameOrigin } from "./utils/isSameOrigin.ts";
 import { match } from "./utils/match.ts";
-import { NavigationOptions } from "./types/NavigationOptions.ts";
-import { URLData } from "./types/URLData.ts";
-import { isLocationObject } from "./utils/isLocationObject.ts";
 import { toStringMap } from "./utils/toStringMap.ts";
 
 export class Route {
@@ -164,8 +164,7 @@ export class Route {
     let quit = async () => {
       this.navigating = false;
 
-      if (this._queue.length !== 0)
-        await this._navigate(this._queue.shift());
+      if (this._queue.length !== 0) await this._navigate(this._queue.shift());
     };
 
     for (let callback of this._callbacks.navigationstart) {
@@ -216,11 +215,9 @@ export class Route {
       return;
     }
 
-    window.history[payload?.history === "replace" ? "replaceState" : "pushState"](
-      {},
-      "",
-      href,
-    );
+    window.history[
+      payload?.history === "replace" ? "replaceState" : "pushState"
+    ]({}, "", href);
   }
 
   /**
@@ -259,12 +256,12 @@ export class Route {
    */
   compile<T extends LocationValue>(urlPattern: T, data?: URLData<T>) {
     if (isLocationObject(urlPattern)) return urlPattern.compile(data);
-  
+
     let url = new QuasiURL(urlPattern ?? "");
     let inputQuery = data?.query;
-  
+
     if (inputQuery) url.search = new URLSearchParams(toStringMap(inputQuery));
-  
+
     return url.href;
   }
 

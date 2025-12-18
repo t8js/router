@@ -1,5 +1,5 @@
-import { LinkElement } from "../types/LinkElement.ts";
-import { NavigationOptions } from "../types/NavigationOptions.ts";
+import type { LinkElement } from "../types/LinkElement.ts";
+import type { NavigationOptions } from "../types/NavigationOptions.ts";
 
 export function getNavigationOptions({ href, target, dataset }: LinkElement) {
   return {
