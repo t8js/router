@@ -8,5 +8,6 @@ export function getNavigationOptions({ href, target, dataset }: LinkElement) {
     spa: dataset.spa,
     history: dataset.history,
     scroll: dataset.scroll,
+    id: dataset.id,
   } as NavigationOptions;
 }
