@@ -203,23 +203,23 @@ export class Route {
    * Performs the actual transition to the next `href` value.
    * Involves navigation via History API or `window.location`.
    */
-  _transition(payload: NavigationOptions): ReturnType<NavigationCallback> {
+  _transition(options?: NavigationOptions): ReturnType<NavigationCallback> {
     if (typeof window === "undefined") return;
 
-    let target = payload?.target;
-    let href = payload?.href;
+    let target = options?.target;
+    let href = options?.href;
 
     if ((target && target !== "_self") || href === undefined) return;
 
-    if (!window.history || !isSameOrigin(href) || payload?.spa === "off") {
-      window.location[payload?.history === "replace" ? "replace" : "assign"](
+    if (!window.history || !isSameOrigin(href) || options?.spa === "off") {
+      window.location[options?.history === "replace" ? "replace" : "assign"](
         String(href),
       );
       return;
     }
 
     window.history[
-      payload?.history === "replace" ? "replaceState" : "pushState"
+      options?.history === "replace" ? "replaceState" : "pushState"
     ]({}, "", String(href));
   }
 
@@ -228,11 +228,11 @@ export class Route {
    * Scrolls to the element matching the URL fragment if the element
    * is available or to the top of the page otherwise.
    */
-  _complete(payload: NavigationOptions): ReturnType<NavigationCallback> {
-    if (typeof window === "undefined" || payload?.scroll === "off") return;
+  _complete(options?: NavigationOptions): ReturnType<NavigationCallback> {
+    if (typeof window === "undefined" || options?.scroll === "off") return;
 
-    let target = payload?.target;
-    let href = payload?.href;
+    let target = options?.target;
+    let href = options?.href;
 
     if ((target && target !== "_self") || href === undefined) return;
 
