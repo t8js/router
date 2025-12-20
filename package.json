@@ -31,7 +31,7 @@
     "zod": "^4.1.13"
   },
   "dependencies": {
-    "@standard-schema/spec": "^1.0.0",
+    "@standard-schema/spec": "^1.1.0",
     "quasiurl": "^1.1.10"
   }
 }
