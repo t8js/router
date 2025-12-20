@@ -18,14 +18,14 @@
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "demo": "npx @t8/serve 3000 * tests/routing -b",
+    "demo": "npx @t8/serve tests/routing --spa -b",
     "preversion": "npx npm-run-all shape test",
     "shape": "npx codeshape",
     "test": "npx playwright test --project=chromium"
   },
   "devDependencies": {
     "@playwright/test": "^1.56.0",
-    "@t8/serve": "^0.1.39",
+    "@t8/serve": "^0.2.0",
     "@types/node": "^24.5.2",
     "url-shape": "^1.3.12",
     "zod": "^4.1.13"
