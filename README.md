@@ -135,7 +135,7 @@ console.log(/^\/sections\/\d+\/?/.test(route.href));
 ```js
 let { ok, params } = route.match(/^\/sections\/(?<id>\d+)\/?/);
 
-console.log(ok, params.id);
+console.log(ok, params.id, params[0]);
 ```
 
 ```js
@@ -148,6 +148,8 @@ let sectionTitle = route.at(
 );
 // at "/sections/<id>" ? "Section <id>" : undefined
 ```
+
+⬥ With a regular expression route pattern, `params` contains values of its capturing groups accessible by numeric indices; named capturing group values can also be retrieved by their names (like `params.id` in the examples above).
 
 ⬥ Type-safe `params` can be obtained by providing a type-safe URL pattern, such as produced by [*url-shape*](https://github.com/t8js/url-shape#readme), to `route.match(pattern)` or `route.at(pattern, x, y)`.
 
