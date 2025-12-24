@@ -16,7 +16,7 @@ Vanilla JS/TS router for SPA navigation and URL pattern matching
 ```js
 let route = new Route();
 
-route.observe(document); // switch links to SPA navigation mode
+route.observe(document); // switch links to the SPA navigation mode
 ```
 
 ```diff
@@ -63,7 +63,7 @@ Installation: `npm i @t8/router`
 
 ## Initialization
 
-A `Route` instance exposes methods for URL navigation without full-page reloads resembling the similar methods exposed by `window.location` for regular URL navigation.
+A `Route` instance exposes methods for URL navigation without full-page reloads resembling the methods exposed by `window.location` for regular URL navigation.
 
 ```js
 import { Route } from "@t8/router";
@@ -101,7 +101,7 @@ let route = new Route();
 
 ## Events & Middleware
 
-Subscription to the `Route`'s navigation events allows to hook into the course of the route navigation.
+Subscription to the `Route`'s navigation events allows to hook into the course of the route navigation, with event handlers effectively acting like routing middleware.
 
 ```js
 route.on("navigationstart", ({ href }) => {
@@ -122,7 +122,7 @@ route.on("navigationcomplete", ({ href }) => {
 });
 ```
 
-⬥ Both event handlers, acting like routing middleware, are immediately called when they are added if the route is already in the navigation-complete state.
+⬥ Handlers of both events are immediately called when they are added if the route is already in the navigation-complete state.
 
 ## Route matching
 
