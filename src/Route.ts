@@ -107,7 +107,7 @@ export class Route {
 
     // Allow setting up event handlers before the first navigation.
     Promise.resolve()
-      .then(() => this._navigate({ href: toHref(url) }))
+      .then(() => this.navigate({ href: toHref(url) }))
       .then(() => {
         this._inited = true;
       });
@@ -118,7 +118,7 @@ export class Route {
    */
   _connect(): () => void {
     let navigationHandler = () => {
-      this._navigate();
+      this.navigate();
     };
 
     window.addEventListener("popstate", navigationHandler);
@@ -145,7 +145,7 @@ export class Route {
   /**
    * Defines the course of the navigation process.
    */
-  async _navigate(options?: NavigationOptions): Promise<void> {
+  async navigate(options?: NavigationOptions): Promise<void> {
     if (!this.active) return;
 
     if (this.navigating) {
@@ -167,7 +167,7 @@ export class Route {
     let quit = async () => {
       this.navigating = false;
 
-      if (this._queue.length !== 0) await this._navigate(this._queue.shift());
+      if (this._queue.length !== 0) await this.navigate(this._queue.shift());
     };
 
     for (let callback of this._callbacks.navigationstart) {
@@ -326,7 +326,7 @@ export class Route {
    * history (similarly to [`history.pushState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/pushState)).
    */
   assign(url: LocationValue) {
-    this._navigate({ href: toHref(url) });
+    this.navigate({ href: toHref(url) });
   }
 
   /**
@@ -334,14 +334,14 @@ export class Route {
    * entry (similarly to [`history.replaceState()`](https://developer.mozilla.org/en-US/docs/Web/API/History/replaceState)).
    */
   replace(url: LocationValue) {
-    this._navigate({ href: toHref(url), history: "replace" });
+    this.navigate({ href: toHref(url), history: "replace" });
   }
 
   /**
    * Navigates to the current URL and renotifies the subscribers.
    */
   reload() {
-    this._navigate();
+    this.navigate();
   }
 
   /**
@@ -372,7 +372,7 @@ export class Route {
   }
 
   set href(url: LocationValue) {
-    this._navigate({ href: toHref(url) });
+    this.navigate({ href: toHref(url) });
   }
 
   get pathname(): string {
@@ -382,7 +382,7 @@ export class Route {
   set pathname(value: LocationValue) {
     let url = new QuasiURL(this._href);
     url.pathname = value ? String(value) : "";
-    this._navigate({ href: url.href });
+    this.navigate({ href: url.href });
   }
 
   get search(): string {
@@ -392,7 +392,7 @@ export class Route {
   set search(value: string | URLSearchParams) {
     let url = new QuasiURL(this._href);
     url.search = value;
-    this._navigate({ href: url.href });
+    this.navigate({ href: url.href });
   }
 
   get hash() {
@@ -402,7 +402,7 @@ export class Route {
   set hash(value: string) {
     let url = new QuasiURL(this._href);
     url.hash = value;
-    this._navigate({ href: url.href });
+    this.navigate({ href: url.href });
   }
 
   /**

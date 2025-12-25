@@ -49,7 +49,7 @@ export function observe(
 
     if (element) {
       event.preventDefault();
-      route._navigate(getNavigationOptions(element));
+      route.navigate(getNavigationOptions(element));
     }
   };
 
