@@ -204,8 +204,9 @@ export class Route {
    * Involves navigation via History API or `window.location`.
    */
   _transition(options?: NavigationOptions): ReturnType<NavigationCallback> {
-    if (typeof window === "undefined" || !options || options.href === undefined) return;
-  
+    if (typeof window === "undefined" || !options || options.href === undefined)
+      return;
+
     let { href, target, spa, history } = options;
     let url = String(href);
 
@@ -219,7 +220,11 @@ export class Route {
       return;
     }
 
-    window.history[history === "replace" ? "replaceState" : "pushState"]({}, "", url);
+    window.history[history === "replace" ? "replaceState" : "pushState"](
+      {},
+      "",
+      url,
+    );
   }
 
   /**
