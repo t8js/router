@@ -204,23 +204,22 @@ export class Route {
    * Involves navigation via History API or `window.location`.
    */
   _transition(options?: NavigationOptions): ReturnType<NavigationCallback> {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || !options || options.href === undefined) return;
+  
+    let { href, target, spa, history } = options;
+    let url = String(href);
 
-    let target = options?.target;
-    let href = options?.href;
-
-    if ((target && target !== "_self") || href === undefined) return;
-
-    if (!window.history || !isSameOrigin(href) || options?.spa === "off") {
-      window.location[options?.history === "replace" ? "replace" : "assign"](
-        String(href),
-      );
+    if (target && target !== "_self") {
+      window.open(url, target);
       return;
     }
 
-    window.history[
-      options?.history === "replace" ? "replaceState" : "pushState"
-    ]({}, "", String(href));
+    if (spa === "off" || !window.history || !isSameOrigin(url)) {
+      window.location[history === "replace" ? "replace" : "assign"](url);
+      return;
+    }
+
+    window.history[history === "replace" ? "replaceState" : "pushState"]({}, "", url);
   }
 
   /**
