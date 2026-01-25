@@ -2,8 +2,6 @@
 
 Vanilla JS/TS router for SPA navigation and URL pattern matching
 
-[![npm](https://img.shields.io/npm/v/@t8/router?labelColor=345&color=46e)](https://www.npmjs.com/package/@t8/router) ![Lightweight](https://img.shields.io/bundlephobia/minzip/@t8/router?label=minzip&labelColor=345&color=46e)
-
 <!-- docsgen-hide-start -->
 - Concise API for SPA navigation
 - Flexible URL pattern matching for URL-based rendering
@@ -58,8 +56,6 @@ route.on("navigationcomplete", callback);
 // e.g. to set the document's title
 ```
 -- docsgen-show-end -->
-
-Installation: `npm i @t8/router`
 
 ## Initialization
 
