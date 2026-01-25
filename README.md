@@ -3,9 +3,9 @@
 Vanilla JS/TS router for SPA navigation and URL pattern matching
 
 <!-- docsgen-hide-start -->
-- Concise API for SPA navigation
-- Flexible URL pattern matching for URL-based rendering
-- Navigation middleware
+Concise API for SPA navigation&nbsp;&middot; Flexible URL pattern matching for URL-based rendering&nbsp;&middot; Navigation middleware
+
+This approach is applicable to React apps as well, see [T8 React Router](https://github.com/t8js/react-router) for more details.
 <!-- docsgen-hide-end -->
 
 <!-- docsgen-show-start --
