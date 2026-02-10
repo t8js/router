@@ -175,5 +175,5 @@ route.observe(document.querySelector("#app"), "nav a");
 
 ---
 
-- [Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts)
+- [Basic usage example](https://codesandbox.io/p/sandbox/n7y5rx?file=%2Fsrc%2Findex.ts&h=320)
 - [T8 React Router](https://github.com/t8js/react-router)
